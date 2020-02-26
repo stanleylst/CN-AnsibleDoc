@@ -1,47 +1,46 @@
 .. _ansible_documentation:
 
-Ansible Documentation
+Ansible「2.9」 中文官方文档
 =====================
 
-About Ansible
+Ansible 简介
 `````````````
 
-Ansible is an IT automation tool.  It can configure systems, deploy software, and orchestrate more advanced IT tasks such as continuous deployments or zero downtime rolling updates.
+Ansible 是一款 IT 自动化工具。主要应用场景有配置系统、软件部署、持续发布及不停服平滑滚动更新的高级任务编排。
 
-Ansible's main goals are simplicity and ease-of-use. It also has a strong focus on security and reliability, featuring a minimum of moving parts, usage of OpenSSH for transport (with other transports and pull modes as alternatives), and a language that is designed around auditability by humans--even those not familiar with the program.
+Ansible 本身非常简单易用，同时注重安全和可靠性，以最小化变动为特色，使用 OpenSSH 实现数据传输 ( 如果有需要的话也可以使用其它传输模式或者 pull 模式 )，其语言设计非常利于人类阅读，即使是针对不刚接触 Ansible 的新手来讲亦是如此。
 
-We believe simplicity is relevant to all sizes of environments, so we design for busy users of all types: developers, sysadmins, release engineers, IT managers, and everyone in between. Ansible is appropriate for managing all environments, from small setups with a handful of instances to enterprise environments with many thousands of instances.
+我们坚信无论什么范围的环境，简单都是必须的，所以我们的设计尽可能满足各类型的繁忙人群：开发人员、系统管理员、发布工程师、IT 管理员等所有类型的人。同时， Ansible 适用于各种环境，小到几台多到成千上万台的企业实际环境都完全满足。
 
-Ansible manages machines in an agent-less manner. There is never a question of how to
-upgrade remote daemons or the problem of not being able to manage systems because daemons are uninstalled.  Because OpenSSH is one of the most peer-reviewed open source components, security exposure is greatly reduced. Ansible is decentralized--it relies on your existing OS credentials to control access to remote machines. If needed, Ansible can easily connect with Kerberos, LDAP, and other centralized authentication management systems.
+Ansible 不使用C/S架构管理节点，即没有 Agent 。 这样的架构使得 Ansible 不会存在如何升级远程 Agent 管理进程或者因为没有安装 Agent 而无法管理系统。 因为 OpenSSH 是非常流行的开源组件，安全问题也非常少 。 Ansible 的 `去中心化` 管理方式深受业内认可， 即它只依赖 OS 的 KEY 认证访问远程主机。 如需， Ansible 可以便捷接入 Kerberos, LDAP 或者其它认证系统。
 
-This documentation covers the version of Ansible noted in the upper left corner of this page. We maintain multiple versions of Ansible and of the documentation, so please be sure you are using the version of the documentation that covers the version of Ansible you're using. For recent features, we note the version of Ansible where the feature was added.
+该文档覆盖了 Ansible 所有版本的文档，可以通过左边栏索引跳转对应页面 「别跳了，就翻译了一个版本，官方更新太快了」。 官方并行管理多个版本 Ansible 及对应版本的文档，所以使用前请确认参考的是对应版本的文档。 最新的功能，我们会在版本中标识新增的功能。
 
-Ansible releases a new major release of Ansible approximately three to four times per year. The core application evolves somewhat conservatively, valuing simplicity in language design and setup. However, the community around new modules and plugins being developed and contributed moves very quickly, adding many new modules in each release.
+Ansible 主版本大概每年 3-4 个版本。 核心功能应用的发布会很谨慎，每个版本都非常重视代码质量和语言简洁性。 但是， 社区贡献的新模块和组件发展的非常快，每个版本都会合入很多的新模块。
 
 
 .. toctree::
    :maxdepth: 2
-   :caption: Installation, Upgrade & Configuration
+   :caption: 安装、升级 * 配置
 
    installation_guide/index
    porting_guides/porting_guides
 
 .. toctree::
    :maxdepth: 2
-   :caption: Using Ansible
+   :caption: Ansible 的使用
 
    user_guide/index
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contributing to Ansible
+   :caption: 向 Ansible 贡献代码
 
    community/index
 
 .. toctree::
    :maxdepth: 2
-   :caption: Extending Ansible
+   :caption: 扩展 Ansible
 
    dev_guide/index
 
