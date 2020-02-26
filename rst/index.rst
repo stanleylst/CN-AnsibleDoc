@@ -21,7 +21,7 @@ Ansible 主版本大概每年 3-4 个版本。 核心功能应用的发布会很
 
 .. toctree::
    :maxdepth: 2
-   :caption: 安装、升级 * 配置
+   :caption: 安装、升级 & 配置
 
    installation_guide/index
    porting_guides/porting_guides
@@ -40,14 +40,14 @@ Ansible 主版本大概每年 3-4 个版本。 核心功能应用的发布会很
 
 .. toctree::
    :maxdepth: 2
-   :caption: 扩展 Ansible
+   :caption: Ansible 扩展
 
    dev_guide/index
 
 .. toctree::
    :glob:
    :maxdepth: 1
-   :caption: Common Ansible Scenarios
+   :caption: Ansible 通用场景
 
    scenario_guides/cloud_guides
    scenario_guides/network_guides
@@ -55,7 +55,7 @@ Ansible 主版本大概每年 3-4 个版本。 核心功能应用的发布会很
 
 .. toctree::
    :maxdepth: 2
-   :caption: Ansible Network Automation
+   :caption: Ansible Network 自动化
 
    network/getting_started/index
    network/user_guide/index
@@ -71,7 +71,7 @@ Ansible 主版本大概每年 3-4 个版本。 核心功能应用的发布会很
 
 .. toctree::
    :maxdepth: 1
-   :caption: Reference & Appendices
+   :caption: 附件引用
 
    ../modules/modules_by_category
    reference_appendices/playbooks_keywords
@@ -99,6 +99,6 @@ Ansible 主版本大概每年 3-4 个版本。 核心功能应用的发布会很
 
 .. toctree::
    :maxdepth: 2
-   :caption: Roadmaps
+   :caption: 蓝图
 
    roadmap/index.rst

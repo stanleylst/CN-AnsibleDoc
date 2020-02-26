@@ -1,75 +1,62 @@
 .. _installation_guide:
 .. _intro_installation_guide:
 
-Installing Ansible
+安装 Ansible
 ===================
 
-This page describes how to install Ansible on different platforms.
-Ansible is an agentless automation tool that by default manages machines over the SSH protocol. Once installed, Ansible does
-not add a database, and there will be no daemons to start or keep running.  You only need to install it on one machine (which could easily be a laptop) and it can manage an entire fleet of remote machines from that central point.  When Ansible manages remote machines, it does not leave software installed or running on them, so there's no real question about how to upgrade Ansible when moving to a new version.
+该页面展示如何在不同平台安装 Ansible。
+Ansible 不用安装客户端，通过 SSH 协议管理远程机器。 一旦安装， Ansible 不需要数据库，也不需要后台保持运行。 一旦安装( 一台简单的笔记本也可以安装 )完成，它可以管理整个集群。 当 Ansible 管理远程机器时，它不需要软件保持安装状态或者运行状态。 因此，当 Ansible 的升级很简单，只需要迁移到新版本即可。
 
 
 .. contents::
   :local:
 
-Prerequisites
+准备工作
 --------------
 
-You install Ansible on a control node, which then uses SSH (by default) to communicate with your managed nodes (those end devices you want to automate).
+准备一台管理机，该管理机可通过 SSH 连接到你所有的被管理机。
+
 
 .. _control_node_requirements:
 
-Control node requirements
+管理机环境要求
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Currently Ansible can be run from any machine with Python 2 (version 2.7) or Python 3 (versions 3.5 and higher) installed.
-This includes Red Hat, Debian, CentOS, macOS, any of the BSDs, and so on.
-Windows is not supported for the control node.
+运行 Ansible 的服务器必须且只需要安装有 Python 2.7+ 或者 Python 3.5+。 Red Hat, Debian, CentOS, macOS, 任一 BSD 系列的系统均可。 但`Windows` 不能用于管理机。
 
-When choosing a control node, bear in mind that any management system benefits from being run near the machines being managed. If you are running Ansible in a cloud, consider running it from a machine inside that cloud. In most cases this will work better than on the open Internet.
+
+选择管理机时，需要注意的时，网络条件越好越便于管理。 比如：当你选择在云上使用 Ansible 时，那么管理机和管理节点都在云上是最佳选择，连接外网的节点速度则会慢很多，也存在很大的安全风险。
 
 .. note::
 
-    macOS by default is configured for a small number of file handles, so if you want to use 15 or more forks you'll need to raise the ulimit with ``sudo launchctl limit maxfiles unlimited``. This command can also fix any "Too many open files" error.
+    macOS 系统默认的文件句柄数比较小，如果你希望并发15个或者更多线程，你需要通过如下命令增加系统文件句柄打开上限。 ``sudo launchctl limit maxfiles unlimited``。 不然，过多的线程数会提示报错： Too many open files 。
 
 
 .. warning::
 
-    Please note that some modules and plugins have additional requirements. For modules these need to be satisfied on the 'target' machine (the managed node) and should be listed in the module specific docs.
+    需要注意的是，部分模块或者组件在使用时需要额外安装插件。 管理节点需要安装必要的插件后方可正常被管理。具体请参考对应的模块文档
+
 
 .. _managed_node_requirements:
 
-Managed node requirements
+
+受管节点环境要求
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-On the managed nodes, you need a way to communicate, which is normally SSH. By
-default this uses SFTP. If that's not available, you can switch to SCP in
-:ref:`ansible.cfg <ansible_configuration_settings>`.  You also need Python 2 (version 2.6 or later) or Python 3 (version 3.5 or
-later).
+受管节点需要和外界正常通信，默认使用 SSH 协议。 默认使用 SFTP 。 如果 SFTP 无法使用，你可以在 `ansible.cfg` 中将其修改为 SCP . 同样，受管机需要有 Python 2.6+ 或 Python 3.5以上的环境
 
 .. note::
 
-   * If you have SELinux enabled on remote nodes, you will also want to install
-     libselinux-python on them before using any copy/file/template related functions in Ansible. You
-     can use the :ref:`yum module<yum_module>` or :ref:`dnf module<dnf_module>` in Ansible to install this package on remote systems
-     that do not have it.
+   * 如果受管机开启了 SELinux，你需要安装 libselinux-python ，不然 copy/file/template 等任何相关联的功能都无法使用。 你可以使用 :ref:`yum module<yum_module>` 或 :ref:`dnf module<dnf_module>` 在受管机安装软件。
 
-   * By default, Ansible uses the Python interpreter located at :file:`/usr/bin/python` to run its
-     modules.  However, some Linux distributions may only have a Python 3 interpreter installed to
-     :file:`/usr/bin/python3` by default.  On those systems, you may see an error like::
+   * 默认情况下 Ansible 使用 :file:`/usr/bin/python` 下的Python 解释器运行命令。 但部分 Linux 发行版可能只安装了 Python 3 解释器，可以从 :file:`/usr/bin/python3` 找到。如果遇到类似如下的错误，表示你需要检查 Python 环境 ::
 
         "module_stdout": "/bin/sh: /usr/bin/python: No such file or directory\r\n"
 
-     you can either set the :ref:`ansible_python_interpreter<ansible_python_interpreter>` inventory variable (see
-     :ref:`inventory`) to point at your interpreter or you can install a Python 2 interpreter for
-     modules to use. You will still need to set :ref:`ansible_python_interpreter<ansible_python_interpreter>` if the Python
-     2 interpreter is not installed to :command:`/usr/bin/python`.
+     你可以设置仓库文件对应亦是 :ref:`ansible_python_interpreter<ansible_python_interpreter>` (参考 :ref:`inventory`) 指明解释器位置，或者干脆安装一个 Python 2的解释器。 如果 Python 2 的解释器没有安装在指定目录 :command:`/usr/bin/python` 。 那你依然需要修改仓库文件指定解释器的位置。 :ref:`ansible_python_interpreter<ansible_python_interpreter>`
 
-   * Ansible's :ref:`raw module<raw_module>`, and the :ref:`script module<script_module>`, do not depend
-     on a client side install of Python to run.  Technically, you can use Ansible to install a compatible
-     version of Python using the :ref:`raw module<raw_module>`, which then allows you to use everything else.
-     For example, if you need to bootstrap Python 2 onto a RHEL-based system, you can install it
-     as follows:
+
+   * Ansible 的 :ref:`raw module<raw_module>` 模块和 :ref:`script module<script_module>` 不依赖受管机的 Python 环境。 因此，从技术角度上讲，我可以使用 Ansible 这两个模块 ( :ref:`raw module<raw_module>` 和 :ref:`script module<script_module>` ) 编译安装 Python 环境。 举例如下： 你想在 RHEL 系列系统上安装 Python 2环境，请参考如下命令：
 
      .. code-block:: shell
 
@@ -77,23 +64,20 @@ later).
 
 .. _what_version:
 
-Selecting an Ansible version to install
+指定安装具体的版本
 ---------------------------------------
 
-Which Ansible version to install is based on your particular needs. You can choose any of the following ways to install Ansible:
+具体安装哪个版本取决于你的需求。 你可以选择如下的任何一种方式来安装Ansible:
 
-* Install the latest release with your OS package manager (for Red Hat Enterprise Linux (TM), CentOS, Fedora, Debian, or Ubuntu).
-* Install with ``pip`` (the Python package manager).
-* Install from source to access the development (``devel``) version to develop or test the latest features.
+* 使用系统默认的包管理器安装 (for Red Hat Enterprise Linux (TM), CentOS, Fedora, Debian, or Ubuntu).
+* Install with ``pip`` ( Python 包管理器 ).
+* 源码安装 ``devel`` 版本的Ansible w体验最新版本的功能
 
 .. note::
 
-	You should only run Ansible from ``devel`` if you are modifying the Ansible engine, or trying out features under development. This is a rapidly changing source of code and can become unstable at any point.
+    只有当你希望修改 Ansible 引擎或者尝试修改码源时，你才会需要安装 ``devel``  版本，因为 ``devel`` 版本是非稳定版本，变化 非常快。
 
-
-Ansible creates new releases two to three times a year. Due to this short release cycle,
-minor bugs will generally be fixed in the next release versus maintaining backports on the stable branch.
-Major bugs will still have maintenance releases when needed, though these are infrequent.
+Ansible 每年发布 2-3 个新版本。 得益于发布周期短，小 BUGS 通常在下一个版本修复而不会在稳定分支上保留。 主要 BUGS 如有需要会使用专门的维护分支，当然，这种情况并不多见。
 
 
 .. _installing_the_control_node:
@@ -114,25 +98,26 @@ On RHEL and CentOS:
 
     $ sudo yum install ansible
 
-RPMs for RHEL 7  and RHEL 8 are available from the `Ansible Engine repository <https://access.redhat.com/articles/3174981>`_.
+RPMs for RHEL 7  and RHEL 8 参考 `Ansible Engine repository <https://access.redhat.com/articles/3174981>`_.
 
-To enable the Ansible Engine repository for RHEL 8, run the following command:
+RHEL 8 开启repository :
 
 .. code-block:: bash
 
     $ sudo subscription-manager repos --enable ansible-2.9-for-rhel-8-x86_64-rpms
 
-To enable the Ansible Engine repository for RHEL 7, run the following command:
+RHEL 7 开启repository : 
 
 .. code-block:: bash
 
     $ sudo subscription-manager repos --enable rhel-7-server-ansible-2.9-rpms
 
-RPMs for currently supported versions of RHEL, CentOS, and Fedora are available from `EPEL <https://fedoraproject.org/wiki/EPEL>`_ as well as `releases.ansible.com <https://releases.ansible.com/ansible/rpm>`_.
+RHEL, CentOS, and Fedora 的最新 RPM 版本获取方式： `EPEL <https://fedoraproject.org/wiki/EPEL>`_ as well as `releases.ansible.com <https://releases.ansible.com/ansible/rpm>`_.
 
-Ansible version 2.4 and later can manage earlier operating systems that contain Python 2.6 or higher.
+Ansible 2.4+ 可以管理包含 Python 2.6 或更高版本的早期操作系统。
 
-You can also build an RPM yourself. From the root of a checkout or tarball, use the ``make rpm`` command to build an RPM you can distribute and install.
+你也可以编译自己的 RPM 包：
+
 
 .. code-block:: bash
 
@@ -148,7 +133,8 @@ Installing Ansible on Ubuntu
 
 Ubuntu builds are available `in a PPA here <https://launchpad.net/~ansible/+archive/ubuntu/ansible>`_.
 
-To configure the PPA on your machine and install Ansible run these commands:
+
+配置 PPA 或者安装 Ansible:
 
 .. code-block:: bash
 
@@ -157,28 +143,31 @@ To configure the PPA on your machine and install Ansible run these commands:
     $ sudo apt-add-repository --yes --update ppa:ansible/ansible
     $ sudo apt install ansible
 
-.. note:: On older Ubuntu distributions, "software-properties-common" is called "python-software-properties". You may want to use ``apt-get`` instead of ``apt`` in older versions. Also, be aware that only newer distributions (i.e. 18.04, 18.10, etc.) have a ``-u`` or ``--update`` flag, so adjust your script accordingly.
+.. note:: 旧的 Ubuntu 发行版 "software-properties-common" 名字是 "python-software-properties". 使用 ``apt-get`` 而不是 ``apt`` 。 同时，只有比较新的发行版才有 (i.e. 18.04, 18.10, etc.)  ``-u`` or ``--update`` 参数。 根据情况调整你的脚本。
 
-Debian/Ubuntu packages can also be built from the source checkout, run:
+Debian/Ubuntu 也可以从源码编译:
 
 .. code-block:: bash
 
     $ make deb
 
-You may also wish to run from source to get the development branch, which is covered below.
+
+如果您希望从源头开始获得开发分支，请参考接下来的介绍
 
 Installing Ansible on Debian
 ----------------------------
 
-Debian users may leverage the same source as the Ubuntu PPA.
+Debian 用户可以使用和 Ubuntu PPA 一样的源。
 
-Add the following line to /etc/apt/sources.list:
+
+
+增加如下行到 /etc/apt/sources.list:
 
 .. code-block:: bash
 
     deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main
 
-Then run these commands:
+执行如下命令:
 
 .. code-block:: bash
 
@@ -186,7 +175,7 @@ Then run these commands:
     $ sudo apt update
     $ sudo apt install ansible
 
-.. note:: This method has been verified with the Trusty sources in Debian Jessie and Stretch but may not be supported in earlier versions. You may want to use ``apt-get`` instead of ``apt`` in older versions.
+.. note:: 该方法已在Debian Jessie和Stretch中的Trusty来源中得到验证，但在早期版本中可能不受支持。 旧版本中使用 ``apt-get`` 而不是 ``apt`` .
 
 Installing Ansible on Gentoo with portage
 -----------------------------------------

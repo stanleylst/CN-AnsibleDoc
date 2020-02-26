@@ -2,7 +2,7 @@
 Installation Guide
 ******************
 
-Welcome to the Ansible Installation Guide!
+Ansible 安装指引！
 
 
 .. toctree::
