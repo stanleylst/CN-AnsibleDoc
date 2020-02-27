@@ -184,7 +184,7 @@ Installing Ansible on Gentoo with portage
 
     $ emerge -av app-admin/ansible
 
-To install the newest version, you may need to unmask the Ansible package prior to emerging:
+要安装最新版本，可能需要先屏蔽Ansible软件包，然后再进行开发: 
 
 .. code-block:: bash
 
@@ -193,8 +193,8 @@ To install the newest version, you may need to unmask the Ansible package prior 
 Installing Ansible on FreeBSD
 -----------------------------
 
-Though Ansible works with both Python 2 and 3 versions, FreeBSD has different packages for each Python version.
-So to install you can use:
+
+尽管 Ansible 可以工作在 Python 2 或 3 版本, 但 FreeBSD 每个版本有不同的名字， 安装方式如下:
 
 .. code-block:: bash
 
@@ -207,15 +207,16 @@ or:
     $ sudo pkg install py36-ansible
 
 
-You may also wish to install from ports, run:
+你也可以使用 ports 安装:
 
 .. code-block:: bash
 
     $ sudo make -C /usr/ports/sysutils/ansible install
 
-You can also choose a specific version, i.e  ``ansible25``.
+同样可以指定版本安装，如 ``ansible25``
 
-Older versions of FreeBSD worked with something like this (substitute for your choice of package manager):
+旧版本的 FreeBSD 使用 pkg 管理方式( 具体看你使用什么包管理工具 ):
+
 
 .. code-block:: bash
 
@@ -226,16 +227,18 @@ Older versions of FreeBSD worked with something like this (substitute for your c
 Installing Ansible on macOS
 ---------------------------
 
-The preferred way to install Ansible on a Mac is with ``pip``.
+Mac 安装 Ansible 推荐使用 ``pip``
 
-The instructions can be found in :ref:`from_pip`. If you are running macOS version 10.12 or older, then you should upgrade to the latest ``pip`` to connect to the Python Package Index securely. It should be noted that pip must be run as a module on macOS, and the linked ``pip`` instructions will show you how to do that.
+
+
+具体文档请参考 :ref:`from_pip`。  如果你的 macOS 系统是 10.12+ , 你最好升级到最新的 ``pip`` 版本， pip 必须作为模块在 macOS 运行， 具体参考如上文档。
 
 .. _from_pkgutil:
 
 Installing Ansible on Solaris
 -----------------------------
 
-Ansible is available for Solaris as `SysV package from OpenCSW <https://www.opencsw.org/packages/ansible/>`_.
+参考 `SysV package from OpenCSW <https://www.opencsw.org/packages/ansible/>`_.
 
 .. code-block:: bash
 
@@ -247,27 +250,27 @@ Ansible is available for Solaris as `SysV package from OpenCSW <https://www.open
 Installing Ansible on Arch Linux
 ---------------------------------
 
-Ansible is available in the Community repository::
+通用仓库包含有 Ansible ，直接安装即可 ::
 
     $ pacman -S ansible
 
-The AUR has a PKGBUILD for pulling directly from GitHub called `ansible-git <https://aur.archlinux.org/packages/ansible-git>`_.
+AUR 的 `ansible-git <https://aur.archlinux.org/packages/ansible-git>`_.  拥有一个 PKGBUILD 功能，可以直接从 GitHub 拉取数据。
 
-Also see the `Ansible <https://wiki.archlinux.org/index.php/Ansible>`_ page on the ArchWiki.
+参考 ArchWiki： `Ansible <https://wiki.archlinux.org/index.php/Ansible>`_ 。
 
 .. _from_sbopkg:
 
 Installing Ansible on Slackware Linux
 -------------------------------------
 
-Ansible build script is available in the `SlackBuilds.org <https://slackbuilds.org/apps/ansible/>`_ repository.
-Can be built and installed using `sbopkg <https://sbopkg.org/>`_.
+Ansible 编译脚本的repository ： `SlackBuilds.org <https://slackbuilds.org/apps/ansible/>`_ .
+编译安装参考： `sbopkg <https://sbopkg.org/>`_.
 
-Create queue with Ansible and all dependencies::
+使用 Ansible 和所有依赖创建队列 ::
 
     # sqg -p ansible
 
-Build and install packages from a created queuefile (answer Q for question if sbopkg should use queue or package)::
+从创建的队列文件构建和安装软件包（ 如 sbopkg 提示是否应使用队列或软件包，输入 Q ）::
 
     # sbopkg -k -i ansible
 
@@ -276,11 +279,11 @@ Build and install packages from a created queuefile (answer Q for question if sb
 Installing Ansible on Clear Linux
 ---------------------------------
 
-Ansible and its dependencies are available as part of the sysadmin host management bundle::
+Linux 发行包版本的软件包中默认带有 Ansible 及其依赖包 ::
 
     $ sudo swupd bundle-add sysadmin-hostmgmt
 
-Update of the software will be managed by the swupd tool::
+使用 swupd 工具包升级软件 ::
 
    $ sudo swupd update
 
