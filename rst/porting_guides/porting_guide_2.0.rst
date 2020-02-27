@@ -2,7 +2,7 @@
 .. _porting_2.0_guide:
 
 *************************
-Ansible 2.0 Porting Guide
+Ansible 2.0 迁移指南
 *************************
 
 This section discusses the behavioral changes between Ansible 1.x and Ansible 2.0.

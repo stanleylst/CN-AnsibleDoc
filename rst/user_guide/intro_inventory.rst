@@ -2,24 +2,24 @@
 .. _inventory:
 
 ***************************
-How to build your inventory
+Inventory 使用进阶
 ***************************
 
-Ansible works against multiple managed nodes or "hosts" in your infrastructure at the same time, using a list or group of lists known as inventory. Once your inventory is defined, you use :ref:`patterns <intro_patterns>` to select the hosts or groups you want Ansible to run against.
+Ansible 从 Inventory 读取列表或组，可同时并发操作这些受控节点或主机。 一旦 inventory 被定义，你就可以使用正则匹配主机或者组来指定要运行的主机列表 :ref:`patterns <intro_patterns>` 。
 
-The default location for inventory is a file called ``/etc/ansible/hosts``. You can specify a different inventory file at the command line using the ``-i <path>`` option. You can also use multiple inventory files at the same time, and/or pull inventory from dynamic or cloud sources or different formats (YAML, ini, etc), as described in :ref:`intro_dynamic_inventory`.
-Introduced in version 2.4, Ansible has :ref:`inventory_plugins` to make this flexible and customizable.
+Inventory 主机清单存放在 ``/etc/ansible/hosts``。 你可以在命令行使用 ``-i <path>`` 指定特定的 inventory 清单。 当然，你可以一次指定多个 inventory 清单，也可以使用 pull inventory 的动态获取或者从云主机获取。具体参考  :ref:`intro_dynamic_inventory`.
+
+Ansible 从 2.4 开始， 使用 :ref:`inventory_plugins` 的方式使 inventory 清单更灵活
 
 .. contents::
    :local:
 
 .. _inventoryformat:
 
-Inventory basics: formats, hosts, and groups
+Inventory 基础: formats, hosts, and groups
 ============================================
 
-The inventory file can be in one of many formats, depending on the inventory plugins you have.
-The most common formats are INI and YAML. A basic INI ``/etc/ansible/hosts`` might look like this:
+Inventory 文件可以有多种格式，取决于你使用什么插件，最常用的格式是 YAML 和 INI。 下面是救命:
 
 .. code-block:: text
 
@@ -34,10 +34,11 @@ The most common formats are INI and YAML. A basic INI ``/etc/ansible/hosts`` mig
     two.example.com
     three.example.com
 
-The headings in brackets are group names, which are used in classifying hosts
-and deciding what hosts you are controlling at what times and for what purpose.
 
-Here's that same basic inventory file in YAML format:
+
+括号中的标题是组名，用于对主机进行分类，用于确定什么时间、什么目的、相对哪些主机做什么事情
+
+如下为 YAML 格式的示例:
 
 .. code-block:: yaml
 
@@ -57,25 +58,26 @@ Here's that same basic inventory file in YAML format:
 
 .. _default_groups:
 
-Default groups
---------------
+默认组 ( Default groups )
+--------------------------
 
-There are two default groups: ``all`` and ``ungrouped``. The ``all`` group contains every host.
-The ``ungrouped`` group contains all hosts that don't have another group aside from ``all``.
-Every host will always belong to at least 2 groups (``all`` and ``ungrouped`` or ``all`` and some other group). Though ``all`` and ``ungrouped`` are always present, they can be implicit and not appear in group listings like ``group_names``.
+默认有两个分组： ``all`` and ``ungrouped`` 。 ``all`` 组顾名思义包括所有主机。 ``ungrouped`` 则是 ``all`` 组之外所有主机。所有的主机要不属于 ``all`` 组，要不就属于 ``ungrouped`` 组。
+
+尽管 ``all`` 和 ``ungrouped`` 始终存在，但它们以隐式的方式出现，而不出现在诸如 ``group_names`` 的组列表中。
+
 
 .. _host_multiple_groups:
 
-Hosts in multiple groups
-------------------------
+多主机组
+----------
 
-You can (and probably will) put each host in more than one group. For example a production webserver in a datacenter in Atlanta might be included in groups called [prod] and [atlanta] and [webservers]. You can create groups that track:
+你可以把一台主机放在多个组中。 比如： 亚特兰大 (Atlanta) 数据中心中的生产(prod) 的 webserver 服务器可能包含在 [prod] 和 [atlanta]和 [webservers] 组中。你可以参考如下思路创建组:
 
-* What - An application, stack or microservice. (For example, database servers, web servers, etc).
-* Where - A datacenter or region, to talk to local DNS, storage, etc. (For example, east, west).
-* When - The development stage, to avoid testing on production resources. (For example, prod, test).
+* What - 是什么？一个应用，栈，还是微服务. (例如: database servers, web servers, etc).
+* Where - 在哪里？ 数据中心？某个地区？本地 DNS? 还是一个存储  (例如, east, west).
+* When - 何时？ 开发阶段、生产阶段？(例如： prod, test).
 
-Extending the previous YAML inventory to include what, when, and where would look like:
+扩展以前的 YAML 清单，加入如上示例中 (what, when, and where) 的示例：
 
 .. code-block:: yaml
 
@@ -111,9 +113,9 @@ Extending the previous YAML inventory to include what, when, and where would loo
           bar.example.com:
           three.example.com:
 
-You can see that ``one.example.com`` exists in the ``dbservers``, ``east``, and ``prod`` groups.
+可以看到 ``one.example.com`` 同时存在 ``dbservers``, ``east``, and ``prod`` 组中
+您还可以使用嵌套组来简化此清单中的 ``prod`` and ``test`` 组，优化后结果如下：
 
-You can also use nested groups to simplify ``prod`` and ``test`` in this inventory, for the same result:
 
 .. code-block:: yaml
 
@@ -146,12 +148,13 @@ You can also use nested groups to simplify ``prod`` and ``test`` in this invento
         children:
           west:
 
-You can find more examples on how to organize your inventories and group your hosts in :ref:`inventory_setup_examples`.
+你可以找到更多编排 inventory 的安全 :ref:`inventory_setup_examples`.
 
-Adding ranges of hosts
-----------------------
+增加主机段
+--------------
 
-If you have a lot of hosts with a similar pattern, you can add them as a range rather than listing each hostname separately:
+如果您有许多具有相似模式的主机，则可以将它们添加为一个范围，而不必分别列出每个主机名：
+
 
 In INI:
 
@@ -169,15 +172,19 @@ In YAML:
         hosts:
           www[01:50].example.com:
 
-For numeric patterns, leading zeros can be included or removed, as desired. Ranges are inclusive. You can also define alphabetic ranges:
+
+
+对于数字匹配 [0-9], 也支持字母正则 [a-z]：
+
 
 .. code-block:: text
 
     [databases]
     db-[a:f].example.com
 
-Adding variables to inventory
+Inventory 使用变量
 =============================
+
 
 You can store variable values that relate to a specific host or group in inventory. To start with, you may add variables directly to the hosts and groups in your main inventory file. As you add more and more managed nodes to your Ansible inventory, however, you will likely want to store variables in separate host and group variable files.
 

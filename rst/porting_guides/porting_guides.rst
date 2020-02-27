@@ -1,12 +1,15 @@
 .. _porting_guides:
 
 **********************
-Ansible Porting Guides
+Ansible 移植指南
 **********************
 
-This section lists porting guides that can help you in updating playbooks, plugins and other parts of your Ansible infrastructure from one version of Ansible to the next.
+移植指南可以帮助您升级 Ansible，还有其配套的剧本，插件和其他部分。
 
-Please note that this is not a complete list. If you believe any extra information would be useful in these pages, you can edit by clicking `Edit on GitHub` on the top right, or raising an issue.
+请注意，列表并不完整。 如果您有其它更好的信息，则可以通过单击右上角的 “在GitHub上编辑” 编辑或提交问题。
+
+> # 本页内容重要程度较低，放在最后翻译
+
 
 .. toctree::
    :maxdepth: 1
