@@ -1,27 +1,30 @@
 .. _intro_getting_started:
 
 ***************
-Getting Started
+入门
 ***************
 
-Now that you have read the :ref:`installation guide<installation_guide>` and installed Ansible on a control node, you are ready to learn how Ansible works. A basic Ansible command or playbook:
-  * selects machines to execute against from inventory
-  * connects to those machines (or network devices, or other managed nodes), usually over SSH
-  * copies one or more modules to the remote machines and starts execution there
 
-Ansible can do much more, but you should understand the most common use case before exploring all the powerful configuration, deployment, and orchestration features of Ansible. This page illustrates the basic process with a simple inventory and an ad-hoc command. Once you understand how Ansible works, you can read more details about :ref:`ad-hoc commands<intro_adhoc>`, organize your infrastructure with :ref:`inventory<intro_inventory>`, and harness the full power of Ansible with :ref:`playbooks<playbooks_intro>`.
+假设你已经阅读了 :ref:`安装指南<installation_guide>` 安装好了管理节点并且了解了 Ansible 是如何工作的，那么你可以开始基本的Ansbile 入门操作了: 
+  * 从 inventory 仓库中选择要执行命令的对象
+  * 连接测试这些节点 ( 或者网络设备，或者其它受控节点)connects to those machines (or network devices, or other managed nodes)。 通常使用 SSH 的方式
+  * 复制一个或多个模块到远程计算机并尝试执行
+
+Ansible 的实际功能更强大，但开始之前你需要了解他的基础用法才能发掘其它更强大的功能，比如配置、部署、编排等。本页内容会通过简单的 Inventory 配置和 ad-hoc 命令来演示其基本用法。inventory 参考: :ref:`inventory<intro_inventory>`, 更充分了解 Ansible 点击这里 :ref:`playbooks<playbooks_intro>`.
 
 .. contents::
    :local:
 
-Selecting machines from inventory
-=================================
+选择指定机器执行
+====================
 
-Ansible reads information about which machines you want to manage from your inventory. Although you can pass an IP address to an ad-hoc command, you need inventory to take advantage of the full flexibility and repeatability of Ansible.
+Ansible 是通过读取 Inventory 中的配置知道我们要对哪些机器变更。 虽然你可以在命令行使用 ad-hoc 临时命令时指定 IP 地址的方式来控制要操作的对象，但如果想充分使用 Ansible 的灵活性和或扩展性，你必须掌握 Inventory 的配置
 
-Action: create a basic inventory
+行动： 创建基础清单
 --------------------------------
-For this basic inventory, edit (or create) ``/etc/ansible/hosts`` and add a few remote systems to it. For this example, use either IP addresses or FQDNs:
+
+
+创建 ``/etc/ansible/hosts`` 并添加一些主机列表.  使用 IP 地址或者主机名均可: 
 
 .. code-block:: text
 
@@ -29,51 +32,59 @@ For this basic inventory, edit (or create) ``/etc/ansible/hosts`` and add a few 
    aserver.example.org
    bserver.example.org
 
-Beyond the basics
+基础进阶
 -----------------
-Your inventory can store much more than IPs and FQDNs. You can create :ref:`aliases<inventory_aliases>`, set variable values for a single host with :ref:`host vars<host_variables>`, or set variable values for multiple hosts with :ref:`group vars<group_variables>`.
+
+
+Inventory 不权可以存放 IPs 和主机名. 也可以创建别名，点击查看 :ref:`aliases<inventory_aliases>`, set variable values for a single host with :ref:`host vars<host_variables>`, or set variable values for multiple hosts with :ref:`group vars<group_variables>`.
 
 .. _remote_connection_information:
 
-Connecting to remote nodes
+连接远程受控节点
 ==========================
 
-Ansible communicates with remote machines over the `SSH protocol <https://www.ssh.com/ssh/protocol/>`_. By default, Ansible uses native OpenSSH and connects to remote machines using your current user name, just as SSH does.
+Ansible 和远程主机的通信是通过 `SSH protocol <https://www.ssh.com/ssh/protocol/>`_. 默认 Ansible 使用开源软件 OpenSSh 通过当前用户连接远程主机。
 
-Action: check your SSH connections
+
+行动： 检查 SSH 连接
 ----------------------------------
-Confirm that you can connect using SSH to all the nodes in your inventory using the same username. If necessary, add your public SSH key to the ``authorized_keys`` file on those systems.
 
-Beyond the basics
------------------
-You can override the default remote user name in several ways, including:
-  * passing the ``-u`` parameter at the command line
-  * setting user information in your inventory file
-  * setting user information in your configuration file
-  * setting environment variables
 
-See :ref:`general_precedence_rules` for details on the (sometimes unintuitive) precedence of each method of passing user information. You can read more about connections in :ref:`connections`.
+确认通过相同的用户可以连接到所有的受控节点，有必要的话，你可以手动添加公钥到对应主机的``authorized_keys`` 。
 
-Copying and executing modules
+基础进阶
+------------
+
+有如下几种方式指定用户连接远程受控节点:
+  * 在命令行使用 ``-u`` 指定用户
+  * 在 Inventory 是指定连接用户
+  * 在配置文件中设置连接用户
+  * 设置环境变量
+
+点击 :ref:`general_precedence_rules`  查看优化级管理规则。 connection 连接模块，查看更多请点击 :ref:`connections`.
+
+
+复制和执行模块
 =============================
 
-Once it has connected, Ansible transfers the modules required by your command or playbook to the remote machine(s) for execution.
+一旦建立连接后， Ansible 会将命令或者 playbook 剧本需要的模块传输到远程主机后，在远程主机上执行命令。
 
-Action: run your first Ansible commands
----------------------------------------
-Use the ping module to ping all the nodes in your inventory:
+行动： Ansible 初体验
+---------------------
+
+使用 ping 模块测试主机存活
 
 .. code-block:: bash
 
    $ ansible all -m ping
 
-Now run a live command on all of your nodes:
+在所有节点上执行一条实时命令:
 
 .. code-block:: bash
 
    $ ansible all -a "/bin/echo hello"
 
-You should see output for each host in your inventory, similar to this:
+你运行命令的每台主机应该有类似如下的输出:
 
 .. code-block:: ansible-output
 
@@ -85,11 +96,12 @@ You should see output for each host in your inventory, similar to this:
        "ping": "pong"
    }
 
-Beyond the basics
------------------
-By default Ansible uses SFTP to transfer files. If the machine or device you want to manage does not support SFTP, you can switch to SCP mode in :ref:`intro_configuration`. The files are placed in a temporary directory and executed from there.
+基础进阶
+-----------
 
-If you need privilege escalation (sudo and similar) to run a command, pass the ``become`` flags:
+Ansbile 默认使用 sftp 传输文件。 如果受控节点不支持 SFTP ，你可以根据文档 :ref:`intro_configuration` 切换成成 SCP 模式。这些文件会临时存放在指定目录下，并在该目录执行这些文件。
+
+如果需要超级权限或者特殊权限，类似 sudo ， 使用 ``become`` 参数指定:
 
 .. code-block:: bash
 
@@ -100,25 +112,25 @@ If you need privilege escalation (sudo and similar) to run a command, pass the `
     # as bruce, sudoing to batman
     $ ansible all -m ping -u bruce --become --become-user batman
 
-You can read more about privilege escalation in :ref:`become`.
+更新请参考 in :ref:`become`.
 
-Congratulations! You have contacted your nodes using Ansible. You used a basic inventory file and an ad-hoc command to direct Ansible to connect to specific remote nodes, copy a module file there and execute it, and return output. You have a fully working infrastructure.
 
-Next steps
-==========
-Next you can read about more real-world cases in :ref:`intro_adhoc`,
-explore what you can do with different modules, or read about the Ansible
-:ref:`working_with_playbooks` language.  Ansible is not just about running commands, it
-also has powerful configuration management and deployment features.
+恭喜！ 你已经使用 Ansible 打通了所有的主机的奇经八脉。您使用了一个基本清单文件和一个 ad-hoc 临时命令来操作 Ansible 连接到特定的远程节点，并在这个过程中复制模块文件然后执行它，最后返回输出。 您已经拥有一个可以正常运行的 Ansible 基础架构了。
+
+接下来
+=====
+
+接下来，你可以了解更多关于 ad-hoc 的使用 :ref:`intro_adhoc`, 探索更多其它模块，更多请参考 :ref:`working_with_playbooks` .  Ansible不仅能运行命令，还包括强大的配置管理和部署功能。
+
 
 .. seealso::
 
    :ref:`intro_inventory`
-       More information about inventory
+       inventory 详解
    :ref:`intro_adhoc`
-       Examples of basic commands
+       基础命令示范案例
    :ref:`working_with_playbooks`
-       Learning Ansible's configuration management language
+       深入学习 Ansible 配置管理
    `Mailing List <https://groups.google.com/group/ansible-project>`_
        Questions? Help? Ideas?  Stop by the list on Google Groups
    `irc.freenode.net <http://irc.freenode.net>`_
