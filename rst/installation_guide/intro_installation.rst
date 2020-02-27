@@ -83,7 +83,7 @@ Ansible 每年发布 2-3 个新版本。 得益于发布周期短，小 BUGS 通
 .. _installing_the_control_node:
 .. _from_yum:
 
-Installing Ansible on RHEL, CentOS, or Fedora
+安装 Ansible on RHEL, CentOS, or Fedora
 ----------------------------------------------
 
 On Fedora:
@@ -128,7 +128,7 @@ Ansible 2.4+ 可以管理包含 Python 2.6 或更高版本的早期操作系统�
 
 .. _from_apt:
 
-Installing Ansible on Ubuntu
+安装 Ansible on Ubuntu
 ----------------------------
 
 Ubuntu builds are available `in a PPA here <https://launchpad.net/~ansible/+archive/ubuntu/ansible>`_.
@@ -154,7 +154,7 @@ Debian/Ubuntu 也可以从源码编译:
 
 如果您希望从源头开始获得开发分支，请参考接下来的介绍
 
-Installing Ansible on Debian
+安装 Ansible on Debian
 ----------------------------
 
 Debian 用户可以使用和 Ubuntu PPA 一样的源。
@@ -177,7 +177,7 @@ Debian 用户可以使用和 Ubuntu PPA 一样的源。
 
 .. note:: 该方法已在Debian Jessie和Stretch中的Trusty来源中得到验证，但在早期版本中可能不受支持。 旧版本中使用 ``apt-get`` 而不是 ``apt`` .
 
-Installing Ansible on Gentoo with portage
+安装 Ansible on Gentoo with portage
 -----------------------------------------
 
 .. code-block:: bash
@@ -190,7 +190,7 @@ Installing Ansible on Gentoo with portage
 
     $ echo 'app-admin/ansible' >> /etc/portage/package.accept_keywords
 
-Installing Ansible on FreeBSD
+安装 Ansible on FreeBSD
 -----------------------------
 
 
@@ -224,7 +224,7 @@ or:
 
 .. _on_macos:
 
-Installing Ansible on macOS
+安装 Ansible on macOS
 ---------------------------
 
 Mac 安装 Ansible 推荐使用 ``pip``
@@ -235,7 +235,7 @@ Mac 安装 Ansible 推荐使用 ``pip``
 
 .. _from_pkgutil:
 
-Installing Ansible on Solaris
+安装 Ansible on Solaris
 -----------------------------
 
 参考 `SysV package from OpenCSW <https://www.opencsw.org/packages/ansible/>`_.
@@ -247,7 +247,7 @@ Installing Ansible on Solaris
 
 .. _from_pacman:
 
-Installing Ansible on Arch Linux
+安装 Ansible on Arch Linux
 ---------------------------------
 
 通用仓库包含有 Ansible ，直接安装即可 ::
@@ -260,7 +260,7 @@ AUR 的 `ansible-git <https://aur.archlinux.org/packages/ansible-git>`_.  拥有
 
 .. _from_sbopkg:
 
-Installing Ansible on Slackware Linux
+安装 Ansible on Slackware Linux
 -------------------------------------
 
 Ansible 编译脚本的repository ： `SlackBuilds.org <https://slackbuilds.org/apps/ansible/>`_ .
@@ -276,7 +276,7 @@ Ansible 编译脚本的repository ： `SlackBuilds.org <https://slackbuilds.org/
 
 .. _from swupd:
 
-Installing Ansible on Clear Linux
+安装 Ansible on Clear Linux
 ---------------------------------
 
 Linux 发行包版本的软件包中默认带有 Ansible 及其依赖包 ::
@@ -289,7 +289,7 @@ Linux 发行包版本的软件包中默认带有 Ansible 及其依赖包 ::
 
 .. _from_pip:
 
-Installing Ansible with ``pip``
+安装 Ansible with ``pip``
 --------------------------------
 
 Ansible 可以使用 Python 包管理器 ``pip`` 安装。 但 macOS 因为 ``openssl`` 协议要求的原因， ``pip`` 和 ``*nix`` 的使用和其它系统会有一些区别， pip 以模块的方式运行。 ( 英文原文： It should be noted that macOS requires a slightly different use of ``pip`` than ``*nix`` due to ``openssl`` requirements, therefore pip must be run as a module. ) 如果 ``pip`` 事先没有安装，使用如下命令安装 ::
@@ -447,7 +447,7 @@ Ansible 从 2.9 版本开始支持命令行补全功能，但需要安装 ``argc
 
 更多安装配置信息请参考 `argcomplete documentation <https://argcomplete.readthedocs.io/en/latest/>`_.
 
-Installing ``argcomplete`` on RHEL, CentOS, or Fedora
+安装 ``argcomplete`` on RHEL, CentOS, or Fedora
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 On Fedora:
@@ -464,7 +464,7 @@ On RHEL and CentOS:
     $ sudo yum install python-argcomplete
 
 
-Installing ``argcomplete`` with ``apt``
+安装 ``argcomplete`` with ``apt``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
@@ -472,7 +472,7 @@ Installing ``argcomplete`` with ``apt``
     $ sudo apt install python-argcomplete
 
 
-Installing ``argcomplete`` with ``pip``
+安装 ``argcomplete`` with ``pip``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash

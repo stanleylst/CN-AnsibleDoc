@@ -7,53 +7,49 @@ Configuring Ansible
 .. contents:: Topics
 
 
-This topic describes how to control Ansible settings.
+本页内容介绍如何配置 Ansible .
 
 
 .. _the_configuration_file:
 
-Configuration file
+配置文件
 ==================
 
-Certain settings in Ansible are adjustable via a configuration file (ansible.cfg).
-The stock configuration should be sufficient for most users, but there may be reasons you would want to change them.
-Paths where configuration file is searched are listed in :ref:`reference documentation<ansible_configuration_settings_locations>`.
+主要的核心配置都在 (ansible.cfg)， 其中大多数默认配置满足大部分用户的需求，参考文档中列出了搜索配置文件的路径 :ref:`reference documentation<ansible_configuration_settings_locations>`。
 
 .. _getting_the_latest_configuration:
 
-Getting the latest configuration
+获取最新配置
 --------------------------------
 
-If installing Ansible from a package manager, the latest ``ansible.cfg`` file should be present in ``/etc/ansible``, possibly
-as a ``.rpmnew`` file (or other) as appropriate in the case of updates.
+如果通过包管理工具安装的，那最新的 ``ansible.cfg`` 默认存放在 ``/etc/ansible`` 中，也有可能因为重复安装或升级，文件是以 ``.rpmnew`` 结尾
 
-If you installed Ansible from pip or from source, you may want to create this file in order to override
-default settings in Ansible.
+如果是通过 pip 或者源码包编译安装 Ansible，你需要手动创建或者覆盖原有配置。
 
-An `example file is available on GitHub <https://github.com/ansible/ansible/blob/devel/examples/ansible.cfg>`_.
+案例参考： `example file is available on GitHub <https://github.com/ansible/ansible/blob/devel/examples/ansible.cfg>`_.
 
-For more details and a full listing of available configurations go to :ref:`configuration_settings<ansible_configuration_settings>`. Starting with Ansible version 2.4, you can use the :ref:`ansible-config` command line utility to list your available options and inspect the current values.
+更多更全配置信息可参考：:ref:`configuration_settings<ansible_configuration_settings>`. 从 2.4 版本开始，你可以使用 :ref:`ansible-config` 命令行列出可用选项和变量信息，并且可以检查当前配置。
 
-For in-depth details, see :ref:`ansible_configuration_settings`.
+
+
+更详细信息请参考 :ref:`ansible_configuration_settings`.
 
 .. _environmental_configuration:
 
-Environmental configuration
+环境配置
 ===========================
 
-Ansible also allows configuration of settings using environment variables.
-If these environment variables are set, they will override any setting loaded from the configuration file.
+Ansible 配置同样支持使用系统变量。如果系统环境设置了，会覆盖 Ansible 的配置。
 
-You can get a full listing of available environment variables from :ref:`ansible_configuration_settings`.
+更详细信息请参考 :ref:`ansible_configuration_settings`.
 
 
 .. _command_line_configuration:
 
-Command line options
+命令行选项
 ====================
 
-Not all configuration options are present in the command line, just the ones deemed most useful or common.
-Settings in the command line will override those passed through the configuration file and the environment.
+Ansible 并没有把所有的配置都展示在命令中，只是列出最有用或最通用的部分。在命令行指定的配置优先级比从配置文件中读取的优化级要高，也即会覆盖从配置文件中读取的环境变量。
 
-The full list of options available is in :ref:`ansible-playbook` and :ref:`ansible`.
+更详细信息请参考 :ref:`ansible-playbook` and :ref:`ansible`.
 
