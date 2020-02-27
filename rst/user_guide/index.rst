@@ -2,9 +2,9 @@
 User Guide
 ##########
 
-Welcome to the Ansible User Guide!
+欢迎使用 Ansible User Guide!
 
-This guide covers how to work with Ansible, including using the command line, working with inventory, and writing playbooks.
+该页内容包括命令行使用、配置 inventory、编写 playbooks.
 
 .. toctree::
    :maxdepth: 2

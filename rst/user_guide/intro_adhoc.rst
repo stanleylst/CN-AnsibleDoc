@@ -1,8 +1,9 @@
 .. _intro_adhoc:
 
 *******************************
-Introduction to ad-hoc commands
+ad-hoc 命令操作指引
 *******************************
+
 
 An Ansible ad-hoc command uses the `/usr/bin/ansible` command-line tool to automate a single task on one or more managed nodes. Ad-hoc commands are quick and easy, but they are not reusable. So why learn about ad-hoc commands first? Ad-hoc commands demonstrate the simplicity and power of Ansible. The concepts you learn here will port over directly to the playbook language. Before reading and executing these examples, please read :ref:`intro_inventory`.
 

@@ -1,7 +1,7 @@
 .. _intro_configuration:
 
 *******************
-Configuring Ansible
+配置 Ansible
 *******************
 
 .. contents:: Topics

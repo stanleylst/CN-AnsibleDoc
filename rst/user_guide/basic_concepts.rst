@@ -1,10 +1,10 @@
 .. _basic_concepts:
 
 ****************
-Ansible concepts
+Ansible 概览
 ****************
 
-These concepts are common to all uses of Ansible. You need to understand them to use Ansible for any kind of automation. This basic introduction provides the background you need to follow the rest of the User Guide.
+这部分内容对所有用户均有用。 你需要了解 Ansible 的使用背景才能在各类场景下使用他的自动化功能。本页内容是你深入理解其它内容的基础。
 
 .. contents::
    :local:

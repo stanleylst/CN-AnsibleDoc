@@ -1,20 +1,18 @@
 .. _quickstart_guide:
 
-Ansible Quickstart Guide
+Ansible 快速入门指南
 ========================
 
-We've recorded a short video that introduces Ansible.
+官方录制了一段大概 13 分钟的快速入门指南的视频: `quickstart video <https://www.ansible.com/resources/videos/quick-start-video>`_ 。简介了 Ansible 是什么以及如何快速使用。同时，也会介绍一些 Ansible 生态系统中的一些其它产品。
 
-The `quickstart video <https://www.ansible.com/resources/videos/quick-start-video>`_ is about 13 minutes long and gives you a high level
-introduction to Ansible -- what it does and how to use it. We'll also tell you about other products in the Ansible ecosystem.
 
-Enjoy, and be sure to visit the rest of the documentation to learn more.
+Enjo 的同时，还有很多其它文档需要学习才能更好的使用 Ansible.
 
 .. seealso::
 
-   `A system administrators guide to getting started with Ansible <https://www.redhat.com/en/blog/system-administrators-guide-getting-started-ansible-fast>`_
-       A step by step introduction to Ansible
-   `Ansible Automation for SysAdmins <https://opensource.com/downloads/ansible-quickstart>`_
-       A downloadable guide for getting started with Ansible
+   ` 系统管理员上手指南 <https://www.redhat.com/en/blog/system-administrators-guide-getting-started-ansible-fast>`_
+       一步步带你上手 Ansible
+   ` 系统管理员自动化安全 <https://opensource.com/downloads/ansible-quickstart>`_
+       可以下载到本地的手册
    :ref:`network_getting_started`
-       A guide for network engineers using Ansible for the first time
+       网络工程师首次使用 Ansible 指南

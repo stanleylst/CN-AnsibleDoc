@@ -1,9 +1,10 @@
 :orphan:
 
-Introduction
+简介
 ============
 
-Before we start exploring the main components of Ansible -- playbooks, configuration management, deployment, and orchestration -- we'll learn how to get Ansible installed and cover some basic concepts.  We'll also go over how to execute ad-hoc commands in parallel across your nodes using /usr/bin/ansible, and see what modules are available in Ansible's core (you can also write your own, which is covered later).
+
+在开始探究Ansible的主要组件（剧本，配置管理，部署和编排）之前，我们将学习如何安装Ansible并涵盖一些基本概念。我们还将介绍如何使用 /usr/bin/ansible 在管理节点上并行执行临时命令，查看 Ansible 核心中可用模块（ 您也可以编写自己的模块，但会在稍后的内容中介绍 ）。
 
 .. toctree::
    :maxdepth: 1
