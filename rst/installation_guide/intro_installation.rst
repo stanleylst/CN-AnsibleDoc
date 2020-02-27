@@ -292,20 +292,20 @@ Linux 发行包版本的软件包中默认带有 Ansible 及其依赖包 ::
 Installing Ansible with ``pip``
 --------------------------------
 
-Ansible can be installed with ``pip``, the Python package manager. It should be noted that macOS requires a slightly different use of ``pip`` than ``*nix`` due to ``openssl`` requirements, therefore pip must be run as a module.  If ``pip`` isn't already available on your system of Python, run the following commands to install it::
+Ansible 可以使用 Python 包管理器 ``pip`` 安装。 但 macOS 因为 ``openssl`` 协议要求的原因， ``pip`` 和 ``*nix`` 的使用和其它系统会有一些区别， pip 以模块的方式运行。 ( 英文原文： It should be noted that macOS requires a slightly different use of ``pip`` than ``*nix`` due to ``openssl`` requirements, therefore pip must be run as a module. ) 如果 ``pip`` 事先没有安装，使用如下命令安装 ::
 
     $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     $ python get-pip.py --user
 
-Then install Ansible [1]_::
+安装 Ansible [1]_::
 
     $ pip install --user ansible
 
-For macOS, there is no need to use ``sudo`` or install additional fixes, simply access the Python module namespace for ``pip``::
+macOS 系统不需要需要 ``sudo`` 或者额外安装其它补丁包，只需要 ``pip`` 安装即可::
 
     $ python -m pip install --user ansible
 
-Or if you are looking for the development version::
+如果希望安装开发版本::
 
     $ pip install --user git+https://github.com/ansible/ansible.git@devel
 
@@ -313,11 +313,11 @@ For macOS::
 
     $ python -m pip install --user git+https://github.com/ansible/ansible.git@devel
 
-If you are installing on macOS Mavericks (10.9), you may encounter some noise from your compiler. A workaround is to do the following::
+如果你使用的是 macOS Mavericks (10.9)， 编译的时候可能会有一些 warnging 。 建议额外声明如下编译变量::
 
     $ CFLAGS=-Qunused-arguments CPPFLAGS=-Qunused-arguments pip install --user ansible
 
-In order to use the ``paramiko`` connection plugin or modules that require ``paramiko``, install the required module [2]_::
+如果希望使用 ``paramiko`` 插件或者模块依赖 ``paramiko``, 安装方式如下 [2]_::::
 
     $ pip install --user paramiko
 
@@ -325,55 +325,54 @@ For macOS::
 
     $ python -m pip install --user paramiko
 
-Ansible can also be installed inside a new or existing ``virtualenv``::
+Ansible 也可以安装在 Python 虚拟环境管理器 ``virtualenv`` 指定的环境中 ::
 
     $ python -m virtualenv ansible  # Create a virtualenv if one does not already exist
     $ source ansible/bin/activate   # Activate the virtual environment
     $ pip install ansible
 
-If you wish to install Ansible globally, run the following commands::
+如果想全局安装 Ansible ::
 
     $ sudo python get-pip.py
     $ sudo pip install ansible
 
 .. note::
 
-    Running ``pip`` with ``sudo`` will make global changes to the system. Since ``pip`` does not coordinate with system package managers, it could make changes to your system that leaves it in an inconsistent or non-functioning state. This is particularly true for macOS. Installing with ``--user`` is recommended unless you understand fully the implications of modifying global files on the system.
+    需要注意的是 使用 ``sudo pip`` 是全局安装的模式。 由于 ``pip`` 无法与系统管理包器协调，所以如果使用 ``sudo`` 模式可能会改变系统环境，导致系统无法运行， macOS 系统尤其容易发生该问题。 如果你非专门人士，对系统全局文件功能完全了解前，建议使用 ``--user`` 参数。
 
 .. note::
 
-    Older versions of ``pip`` default to http://pypi.python.org/simple, which no longer works.
-    Please make sure you have the latest version of ``pip`` before installing Ansible.
-    If you have an older version of ``pip`` installed, you can upgrade by following `pip's upgrade instructions <https://pip.pypa.io/en/stable/installing/#upgrading-pip>`_ .
+    旧版本的 ``pip``  默认网址是 http://pypi.python.org/simple, 现在已经不再维护。
+    安装 Ansile 前请升级 ``pip`` 到最新版本。
+
+    如果你已经安装的旧版本的 ``pip``， 升级文档可参考  <https://pip.pypa.io/en/stable/installing/#upgrading-pip>`_ .
 
 
 
 .. _from_source:
 
-Running Ansible from source (devel)
+从源码运行 Ansible (devel)
 -----------------------------------
 
 .. note::
 
-	You should only run Ansible from ``devel`` if you are modifying the Ansible engine, or trying out features under development. This is a rapidly changing source of code and can become unstable at any point.
+    只有当你正在修改 Ansible 引擎或者尝试修改 Ansible 源码时，你才需要使用 ``devel`` 版本。 ``devel`` 分支会随时改变，功能也不稳定。
 
-Ansible is easy to run from source. You do not need ``root`` permissions
-to use it and there is no software to actually install. No daemons
-or database setup are required.
+从源码编译安装 Ansible 也很容易， 不需要 ``root`` 权限，也不需要事先安装软件，更不需要保持后台运行或者设置数据库。
 
 .. note::
+   
+   如果你希望使用 Ansible Tower 作为管理节点，不要使用源码编译安装。 请使用 OS 管理工具 ( 比如： ``apt`` or ``yum``or ``pip`` ) 安装稳定版.
 
-   If you want to use Ansible Tower as the control node, do not use a source installation of Ansible. Please use an OS package manager (like ``apt`` or ``yum``) or ``pip`` to install a stable version.
 
-
-To install from source, clone the Ansible git repository:
+源码安装: 
 
 .. code-block:: bash
 
     $ git clone https://github.com/ansible/ansible.git
     $ cd ./ansible
 
-Once ``git`` has cloned the Ansible repository, setup the Ansible environment:
+``git``下载后 Ansible 后，设置环境变量:
 
 Using Bash:
 
@@ -389,18 +388,18 @@ If you want to suppress spurious warnings/errors, use::
 
     $ source ./hacking/env-setup -q
 
-If you don't have ``pip`` installed in your version of Python, install it::
+请保证已经事先安装了 Python 包管理工具 ``pip``::
 
     $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     $ python get-pip.py --user
 
-Ansible also uses the following Python modules that need to be installed [1]_:
+使用如下命令安装依赖组件 [1]_:
 
 .. code-block:: bash
 
     $ pip install --user -r ./requirements.txt
 
-To update Ansible checkouts, use pull-with-rebase so any local changes are replayed.
+如果希望更改 Ansible checkout的版本， 建议使用 pull-with-rebase 保留原始版本。
 
 .. code-block:: bash
 
@@ -411,46 +410,42 @@ To update Ansible checkouts, use pull-with-rebase so any local changes are repla
     $ git pull --rebase #same as above
     $ git submodule update --init --recursive
 
-Once running the env-setup script you'll be running from checkout and the default inventory file
-will be ``/etc/ansible/hosts``. You can optionally specify an inventory file (see :ref:`inventory`)
-other than ``/etc/ansible/hosts``:
+一旦开始运行 env-setup 脚本，默认表示你使用的 inventory 仓库文件是 ``/etc/ansible/hosts`` . 当然你也可以参考这篇文件指定 inventory 仓库 ( :ref:`inventory` ) :
 
 .. code-block:: bash
 
     $ echo "127.0.0.1" > ~/ansible_hosts
     $ export ANSIBLE_INVENTORY=~/ansible_hosts
 
-You can read more about the inventory file at :ref:`inventory`.
+关于 inventory 从这里可以了解到更多内容 :ref:`inventory` 。
 
-Now let's test things with a ping command:
+执行第一条命令:
 
 .. code-block:: bash
 
     $ ansible all -m ping --ask-pass
 
-You can also use "sudo make install".
+也可以尝试 "sudo make install".
 
 .. _tagged_releases:
 
-Finding tarballs of tagged releases
+安装指定版本的 Ansible
 -----------------------------------
 
-Packaging Ansible or wanting to build a local package yourself, but don't want to do a git checkout?  Tarballs of releases are available on the `Ansible downloads <https://releases.ansible.com/ansible>`_ page.
+如果想打包 Ansible 或者自己构建一个本地的包但又不想 git checkout, 可以从这个页面下载指定的版本包安装 `Ansible downloads <https://releases.ansible.com/ansible>`_ page.
 
-These releases are also tagged in the `git repository <https://github.com/ansible/ansible/releases>`_ with the release version.
-
+这些包同样也放在 Ansible 的发行版仓库中 `git repository <https://github.com/ansible/ansible/releases>`_ 。
 
 .. _shell_completion:
 
-Ansible command shell completion
+Ansible 命令行补全功能
 --------------------------------
 
-As of Ansible 2.9, shell completion of the Ansible command line utilities is available and provided through an optional dependency
-called ``argcomplete``. ``argcomplete`` supports bash, and has limited support for zsh and tcsh.
+Ansible 从 2.9 版本开始支持命令行补全功能，但需要安装 ``argcomplete`` 插件。 ``argcomplete`` 完全支持 bash， 部分功能支持 zsh tcsh。 
 
-You can install ``python-argcomplete`` from EPEL on Red Hat Enterprise based distributions, and or from the standard OS repositories for many other distributions.
+你可以从 RedHat 的 EPEL 源直接安装 ``python-argcomplete``，或者从其它发行版的标准 OS repo 库安装。
 
-For more information about installing and configuration see the `argcomplete documentation <https://argcomplete.readthedocs.io/en/latest/>`_.
+更多安装配置信息请参考 `argcomplete documentation <https://argcomplete.readthedocs.io/en/latest/>`_.
 
 Installing ``argcomplete`` on RHEL, CentOS, or Fedora
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -487,23 +482,23 @@ Installing ``argcomplete`` with ``pip``
 Configuring ``argcomplete``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There are 2 ways to configure ``argcomplete`` to allow shell completion of the Ansible command line utilities: globally or per command.
+有 2 种方式配置 ``argcomplete`` 使 Ansible 支持 shell 命令补全: 全局模式 ( globally ) 或者单个命令 ( per command )。
 
 Globally
 """""""""
 
-Global completion requires bash 4.2.
+全局模式需要 Bash的版本是 4.2
 
 .. code-block:: bash
 
     $ sudo activate-global-python-argcomplete
 
-This will write a bash completion file to a global location. Use ``--dest`` to change the location.
+这条命令将生成 bash 补全文件到全局配置默认目录。 可以使用 ``--dest`` 指定位置。
 
 Per command
 """""""""""
 
-If you do not have bash 4.2, you must register each script independently.
+如果 bash 的版本不是 4.2，那必须独立声明注册每个脚本。
 
 .. code-block:: bash
 
@@ -517,21 +512,19 @@ If you do not have bash 4.2, you must register each script independently.
     $ eval $(register-python-argcomplete ansible-pull)
     $ eval $(register-python-argcomplete ansible-vault)
 
-You should place the above commands into your shells profile file such as ``~/.profile`` or ``~/.bash_profile``.
+如果希望永久有效，如上命令需要写入到环境变量文件，``~/.profile`` or ``~/.bash_profile`` .
 
 ``argcomplete`` with zsh or tcsh
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-See the `argcomplete documentation <https://argcomplete.readthedocs.io/en/latest/>`_.
+zsh 或者 tcsh 命令补全功能请参考 `argcomplete documentation <https://argcomplete.readthedocs.io/en/latest/>`_.
 
 .. _getting_ansible:
 
 Ansible on GitHub
 -----------------
 
-You may also wish to follow the `GitHub project <https://github.com/ansible/ansible>`_ if
-you have a GitHub account. This is also where we keep the issue tracker for sharing
-bugs and feature ideas.
+Asnible 的 GitHub 地址 `GitHub project <https://github.com/ansible/ansible>`_ 。 我们也可以在该地址提交 issue, bugs, 或者产品功能想法。 
 
 
 .. seealso::
@@ -547,5 +540,5 @@ bugs and feature ideas.
    `irc.freenode.net <http://irc.freenode.net>`_
        #ansible IRC chat channel
 
-.. [1] If you have issues with the "pycrypto" package install on macOS, then you may need to try ``CC=clang sudo -E pip install pycrypto``.
+.. [1] 如果你在 macOS 上安装 "pycrypto" 有问题 ，尝试指定 ``CC=clang sudo -E pip install pycrypto``
 .. [2] ``paramiko`` was included in Ansible's ``requirements.txt`` prior to 2.8.
