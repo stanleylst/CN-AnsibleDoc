@@ -1,29 +1,29 @@
-Control node
+管理机
 ============
 
-Any machine with Ansible installed. You can run Ansible commands and playbooks by invoking the ``ansible`` or ``ansible-playbook`` command from any control node. You can use any computer that has a Python installation as a control node - laptops, shared desktops, and servers can all run Ansible. However, you cannot use a Windows machine as a control node. You can have multiple control nodes.
+任何安装了 Ansbile 的服务器，你都可以使用 ``ansible`` or ``ansible-playbook`` 命令。 任何安装了 Ansbile 的机器都可以做为管理节点，便携式计算机，共享桌面和服务器都可以。 你可以配置多个管理节点。唯一需要注意的是，管理节点不支持 Windows 系统。
 
-Managed nodes
+受控节点
 =============
 
-The network devices (and/or servers) you manage with Ansible. Managed nodes are also sometimes called "hosts". Ansible is not installed on managed nodes.
+Ansbile 管理的服务器或者网络设备都称为受控节点。 受控节点有时候也叫做 "hosts" ( 主机 ). 受控节点不需要安装 Ansible.
 
-Inventory
-=========
+Inventory 仓库
+==============
 
-A list of managed nodes. An inventory file is also sometimes called a "hostfile". Your inventory can specify information like IP address for each managed node. An inventory can also organize managed nodes, creating and nesting groups for easier scaling. To learn more about inventory, see :ref:`the Working with Inventory<intro_inventory>` section.
+Inventory 仓库是保存受控节点信息的列表, 因为有时候也叫 "hostfile"， 类似于系统的 hosts 文件。 Inventory 仓库可以以 IP 的方式指定受控节点。 Inventory 同样可以组织管理节点、新增、嵌套组等方式，非常便于扩展。 更多请参考 :ref:`the Working with Inventory<intro_inventory>` 
 
-Modules
-=======
+Modules 模块
+===========
 
-The units of code Ansible executes. Each module has a particular use, from administering users on a specific type of database to managing VLAN interfaces on a specific type of network device. You can invoke a single module with a task, or invoke several different modules in a playbook. For an idea of how many modules Ansible includes, take a look at the :ref:`list of all modules <modules_by_category>`.
+Modules 模块是 Ansible 执行代码的最小单元。 每个模块都是特殊用途，从特殊类型的数据库用户管理，到特殊类型的网络设备 VLAN 接口管理。  你可以在通过执行单个任务调用一个模块，也可以通过 playbook 同时调用执行钓具模块。 在链接中查看 Ansible 总共包括了多少个模块。:ref:` 模块列表 <modules_by_category>`.
 
-Tasks
-=====
+Tasks 任务
+========
 
-The units of action in Ansible. You can execute a single task once with an ad-hoc command.
+Ansible 执行操作的最小单位。 ad-hoc 更适合临时执行命令的执行场景。
 
-Playbooks
-=========
+Playbooks 任务剧本
+================
 
-Ordered lists of tasks, saved so you can run those tasks in that order repeatedly. Playbooks can include variables as well as tasks. Playbooks are written in YAML and are easy to read, write, share and understand. To learn more about playbooks, see :ref:`about_playbooks`.
+Playbooks 是任务列表的组合，通常会把常用的命令列表通过正确的语法写入到 playbook中。 Playbook 可以像普通 tasks 一样调用变量， 其使用 YAML 语法，便于读、写、分享、理解。更多请参考 :ref:`about_playbooks`.
