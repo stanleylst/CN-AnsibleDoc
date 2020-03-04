@@ -1,44 +1,46 @@
 .. _intro_patterns:
 
-Patterns: targeting hosts and groups
+Pattern: 正则匹配主机和组
 ====================================
 
-When you execute Ansible through an ad-hoc command or by running a playbook, you must choose which managed nodes or groups you want to execute against. Patterns let you run commands and playbooks against specific hosts and/or groups in your inventory. An Ansible pattern can refer to a single host, an IP address, an inventory group, a set of groups, or all hosts in your inventory. Patterns are highly flexible - you can exclude or require subsets of hosts, use wildcards or regular expressions, and more. Ansible executes on all inventory hosts included in the pattern.
+当你执行 ad-hoc 临时命令或 playbook 时，你必须指定要被变更的节点或组。 Pattern 可以让你更方便的指定特定主机或组。 可以单独指定一台主机，一个 IP 地址，一个 Inventory 清单组， 一个子网的组或者你 Inventory 中的所有主机。 Pattern 具有高度的灵活性- 您可以排除或要求主机的子集，使用通配符或正则表达式等等。 Ansible 在模式中包含的所有清单主机上执行。
 
 .. contents::
    :local:
 
-Using patterns
+使用 patterns 模式
 --------------
 
-You use a pattern almost any time you execute an ad-hoc command or a playbook. The pattern is the only element of an :ref:`ad-hoc command<intro_adhoc>` that has no flag. It is usually the second element::
+执行临时命令或剧本的任何时候都可以使用模式。 该模式是 :ref:`ad-hoc command<intro_adhoc>` 中唯一没有标志的参数。 它通常是第二个参数::
 
     ansible <pattern> -m <module_name> -a "<module options>"
 
-For example::
+举例::
 
     ansible webservers -m service -a "name=httpd state=restarted"
 
-In a playbook the pattern is the content of the ``hosts:`` line for each play:
+在Playbook 中，pattern 是 ``hosts:`` 的值。
 
 .. code-block:: yaml
 
    - name: <play_name>
      hosts: <pattern>
 
-For example::
+举例::
 
     - name: restart webservers
       hosts: webservers
 
-Since you often want to run a command or playbook against multiple hosts at once, patterns often refer to inventory groups. Both the ad-hoc command and the playbook above will execute against all machines in the ``webservers`` group.
+
+由于您通常想一次对多个主机运行命令或剧本，因此模式通常指代清单组
+由于你通常希望针对多台主机一次性运行一个命令或 playbook， patterns 通常关联是一组主机列表。 ad-hoc 命令和 playbook 将对 ``webservers`` 中的所有主机做变更。
 
 .. _common_patterns:
 
-Common patterns
+通过 patterns
 ---------------
 
-This table lists common patterns for targeting inventory hosts and groups.
+下表展示了 patterns 模式的用法。
 
 .. table::
    :class: documentation-table
@@ -61,36 +63,36 @@ This table lists common patterns for targeting inventory hosts and groups.
    Intersection of groups webservers:&staging              any hosts in webservers that are also in staging
    ====================== ================================ ===================================================
 
-.. note:: You can use either a comma (``,``) or a colon (``:``) to separate a list of hosts. The comma is preferred when dealing with ranges and IPv6 addresses.
+.. note:: 你可以使用  (``,``) 或(``:``) 分隔多个主机。 推荐使用逗号，因为在 IPv6 的场景下首先逗号
 
-Once you know the basic patterns, you can combine them. This example::
+当你掌握基础 pattern 后，你就可以高级进阶混合使用他们了。示例:
 
     webservers:dbservers:&staging:!phoenix
 
-targets all machines in the groups 'webservers' and 'dbservers' that are also in
-the group 'staging', except any machines in the group 'phoenix'.
+该 pattern 表示 'webservers' and 'dbservers' 组的所有主机，和 'staging' 组中的交集的所有主机，并且这些主机不在 'phoenix' 组中。
 
-You can use wildcard patterns with FQDNs or IP addresses, as long as the hosts are named in your inventory by FQDN or IP address::
+你也可以使用正则表示的 FQDN 主机名或 IP 地址:
 
    192.0.\*
    \*.example.com
    \*.com
 
-You can mix wildcard patterns and groups at the same time::
+你也可以同时混合使用正则和 patterns:
 
     one*.com:dbservers
 
-Limitations of patterns
------------------------
+patterns 局限性
+--------------
 
-Patterns depend on inventory. If a host or group is not listed in your inventory, you cannot use a pattern to target it. If your pattern includes an IP address or hostname that does not appear in your inventory, you will see an error like this:
+Patterns 依赖于 Inventory。 如果 host 或 group 不在 Inventory 清单仓库，则不能使用 Pattern 。 如果你使用的 Patterns IP 或主机名不存在。 会引发如下报错:
 
 .. code-block:: text
 
    [WARNING]: No inventory was parsed, only implicit localhost is available
    [WARNING]: Could not match supplied host pattern, ignoring: *.not_in_inventory.com
 
-Your pattern must match your inventory syntax. If you define a host as an :ref:`alias<inventory_aliases>`:
+
+Pattern 必须遵循 Inventory 语法规则。如果你定义了一台 host :ref:`alias<inventory_aliases>`:
 
 .. code-block:: yaml
 
@@ -100,33 +102,34 @@ Your pattern must match your inventory syntax. If you define a host as an :ref:`
         maxRequestsPerChild: 808
         host: 127.0.0.2
 
-you must use the alias in your pattern. In the example above, you must use ``host1`` in your pattern. If you use the IP address, you will once again get the error::
+你必须在 Pattern 使用别名。 在如上的案例中，你必须在 pattern 中使用 ``host1``。 如果你使用 IP 地址，会报错::
 
    [WARNING]: Could not match supplied host pattern, ignoring: 127.0.0.2
 
-Advanced pattern options
+高级 Pattern 选项
 ------------------------
 
-The common patterns described above will meet most of your needs, but Ansible offers several other ways to define the hosts and groups you want to target.
+如上所述的通用 patterns 已经满足你的绝大部分需求，但 Ansible 也提供了几种其它的方式来定义你的目标主机和组。
 
-Using variables in patterns
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+在 patterns 使用变量
+^^^^^^^^^^^^^^^^^^^
 
-You can use variables to enable passing group specifiers via the ``-e`` argument to ansible-playbook::
+ansible-playbook 通过 ``-e`` 选项可以接受变量，在 pattern 中可以使用 ``{{ 变量 }}``::
 
     webservers:!{{ excluded }}:&{{ required }}
 
-Using group position in patterns
+在 patterns 使用组位置参数
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can define a host or subset of hosts by its position in a group. For example, given the following group::
+
+您可以根据主机在主机组中的位置定义主机或主机子集. 如下示例::
 
     [webservers]
     cobweb
     webbing
     weber
 
-you can use subscripts to select individual hosts or ranges within the webservers group::
+你可以使用下标切割选择需要的主机或主机组::
 
     webservers[0]       # == cobweb
     webservers[-1]      # == weber
@@ -135,36 +138,38 @@ you can use subscripts to select individual hosts or ranges within the webserver
     webservers[1:]      # == webbing,weber
     webservers[:3]      # == cobweb,webbing,weber
 
-Using regexes in patterns
+在 patterns 中使用正则
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can specify a pattern as a regular expression by starting the pattern with ``~``::
+以 ``~`` 开始的模式将会被认定为正则表达式::
 
     ~(web|db).*\.example\.com
 
-Patterns and ansible-playbook flags
+Patterns and ansible-playbook 标志
 -----------------------------------
 
-You can change the behavior of the patterns defined in playbooks using command-line options. For example, you can run a playbook that defines ``hosts: all`` on a single host by specifying ``-i 127.0.0.2,``. This works even if the host you target is not defined in your inventory. You can also limit the hosts you target on a particular run with the ``--limit`` flag::
+命令行的优先级比 playbook 高，通过指定命令行选项可以覆盖 playbook 中的定义。 举例：你在 playbook 中定义 ``hosts: all``，但在命令行中指定 ``-i 127.0.0.2`` , 命令行会覆盖 playbook 中的定义。 这种方式甚至在 Inventory 中没有定义目标主机都可行。同样，你可以使用 ``--limit`` 标识指定特定的目标主机::
 
     ansible-playbook site.yml --limit datacenter2
 
-Finally, you can use ``--limit`` to read the list of hosts from a file by prefixing the file name with ``@``::
+最后，你可以使用 ``--limit`` 从一个文件中读取主机列表， 使用时在文件名前加 ``@``::
 
     ansible-playbook site.yml --limit @retry_hosts.txt
 
-If :ref:`RETRY_FILES_ENABLED` is set to ``True``, a ``.retry`` file will be created after the ``ansible-playbook`` run containing a list of failed hosts from all plays. This file is overwritten each time ``ansible-playook`` finishes running.
+如果 :ref:`RETRY_FILES_ENABLED` 设置 ``True``， 当 ``ansible-playbook`` 执行失败的主机记录到以 ``retry`` 结尾的文件中。这个文件在每次 ``ansible-playook`` 执行结束后都会被覆盖。
+
 
     ansible-playbook site.yml --limit @site.retry
 
-To apply your knowledge of patterns with Ansible commands and playbooks, read :ref:`intro_adhoc` and :ref:`playbooks_intro`.
+
+更多关于 ad-hoc 和 playbook 的 pattern 信息请参考 :ref:`intro_adhoc` and :ref:`playbooks_intro`.
 
 .. seealso::
 
    :ref:`intro_adhoc`
-       Examples of basic commands
+       基础命令示例
    :ref:`working_with_playbooks`
-       Learning the Ansible configuration management language
+       学习 Ansible 配置管理语言
    `Mailing List <https://groups.google.com/group/ansible-project>`_
        Questions? Help? Ideas?  Stop by the list on Google Groups
    `irc.freenode.net <http://irc.freenode.net>`_
