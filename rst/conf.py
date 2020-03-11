@@ -45,7 +45,8 @@ AUTHOR = 'Ansible, Inc'
 # They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 # TEST: 'sphinxcontrib.fulltoc'
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'pygments_lexer', 'notfound.extension']
+#extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'pygments_lexer', 'notfound.extension']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx']
 
 # Later on, add 'sphinx.ext.viewcode' to the list if you want to have
 # colorized code generated too for references.
@@ -61,7 +62,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General substitutions.
-project = 'Ansible'
+project = 'CN-AnsibleDoc'
 copyright = "2019 Red Hat, Inc."
 
 # The default replacements for |version| and |release|, also used in various
@@ -127,8 +128,9 @@ rst_epilog = """
 # -----------------------
 
 html_theme_path = ['../_themes']
-html_theme = 'sphinx_rtd_theme'
-html_short_title = 'Ansible Documentation'
+#html_theme = 'sphinx_rtd_theme'
+html_theme = 'alabaster'
+html_short_title = 'CN-AnsibleDoc Lastest 2.9'
 html_show_sphinx = False
 
 html_theme_options = {
@@ -159,7 +161,7 @@ html_context = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = 'Ansible Documentation'
+html_title = 'CN-AnsibleDoc Lastest 2.9'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 # html_short_title = None
@@ -243,7 +245,7 @@ notfound_no_urls_prefix = False
 # (source start file, target name, title, author, document class
 # [howto/manual]).
 latex_documents = [
-    ('index', 'ansible.tex', 'Ansible 2.2 Documentation', AUTHOR, 'manual'),
+    ('index', 'ansible.tex', 'Ansible 2.9 Documentation', AUTHOR, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
