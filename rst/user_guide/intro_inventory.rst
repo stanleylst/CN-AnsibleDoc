@@ -233,7 +233,7 @@ connection 连接远程主机的方式:
 .. _inventory_aliases:
 
 Inventory aliases
------------------
+-------------------
 
 在 Inventory 中定义别名：
 
@@ -273,7 +273,7 @@ In INI 中定义:
 .. _group_variables:
 
 给多台主机设置变量 : group variables
-======================================================
+===================================
 
 如果组中的所有主机共享一个变量值，则可以一次将该变量应用于整个组， INI 格式：
 
@@ -306,8 +306,7 @@ In YAML:
 .. _subgroups:
 
 继承变量值：嵌套组的组变量设置
-
-----------------------------------------------------------------
+---------------------------
 
 您可以设置一个 children 的组变量， ``:children`` INI 格式或 ``children:``  YAML 格式，
 您可以分别使用 ``:vars`` or ``vars:`` 给组定义变量
@@ -448,7 +447,7 @@ Ansible 通过搜索对应的 Inventory 清单文件或 Playbook 剧本文件来
 .. _using_multiple_inventory_sources:
 
 使用多个 Inventory
-================================
+======================
 
 你可以命令行提供多个 Inventory 选项或者配置 :envvar:`ANSIBLE_INVENTORY` 的方式，同时使用多个 Inventory 源 ( 目录， 动态 Inveory 脚本 或者 Inventory 插件提供的文件 )。 该功能针对相互独立的环境非常有帮助，比如你想同时对测试环境和生产环境执行某操作。
 
@@ -503,7 +502,7 @@ Ansible 通过搜索对应的 Inventory 清单文件或 Playbook 剧本文件来
 .. _behavioral_parameters:
 
 主机连接: Inventory 参数设置
-====================================================
+==============================
 
 综上所述, 设置以下变量可控制Ansible与远程主机的交互方式。
 
@@ -593,7 +592,7 @@ Ansible-INI 示例:
   ruby_module_host  ansible_ruby_interpreter=/usr/bin/ruby.1.9.3
 
 Non-SSH 连接类型
---------------
+-----------------
 
 
 如上一节所述，Ansible 通过 SSH 执行剧本，但不限于此连接类型。
@@ -649,14 +648,14 @@ ansible_docker_extra_args
 .. _inventory_setup_examples:
 
 Inventory 设置示例
-========================
+===================
 
 点击这里查看 playbooks 清单剧本和 Ansible 其它组件示例 :ref:`sample_setup`
 
 .. _inventory_setup-per_environment:
 
 示例：一个环境一个 Inventory 清单
---------------------------------------
+--------------------------------
 
 如果你需要管控多套环境，明智的做法是每套环境对应一个独立的 Inventory 配置。 这种方式很难有误操作。比如，你很难实际要修改 "staging" 的服务器却修改了 "test" 环境的。
 
@@ -713,7 +712,7 @@ Inventory 设置示例
 .. _inventory_setup-per_location:
 
 示例: 按位置分组
---------------------------
+------------------
 
 有些任务可能更在意服务器所在的位置。 如 ``db01.test.example.com`` 和 ``app01.test.example.com`` 在 DC1, 而 ``db02.test.example.com`` 位于DC2:
 

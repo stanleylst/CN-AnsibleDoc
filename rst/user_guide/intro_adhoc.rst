@@ -11,7 +11,7 @@ An Ansible ad-hoc command uses the `/usr/bin/ansible` command-line tool to autom
    :local:
 
 Why use ad-hoc commands?
-========================
+==========================
 
 Ad-hoc commands are great for tasks you repeat rarely. For example, if you want to power off all the machines in your lab for Christmas vacation, you could execute a quick one-liner in Ansible without writing a playbook. An ad-hoc command looks like this:
 
@@ -22,14 +22,14 @@ Ad-hoc commands are great for tasks you repeat rarely. For example, if you want 
 You can learn more about :ref:`patterns<intro_patterns>` and :ref:`modules<working_with_modules>` on other pages.
 
 Use cases for ad-hoc tasks
-==========================
+============================
 
 Ad-hoc tasks can be used to reboot servers, copy files, manage packages and users, and much more. You can use any Ansible module in an ad-hoc task. Ad-hoc tasks, like playbooks, use a declarative model,
 calculating and executing the actions required to reach a specified final state. They
 achieve a form of idempotence by checking the current state before they begin and doing nothing unless the current state is different from the specified final state.
 
 Rebooting servers
------------------
+-------------------
 
 The default module for the ``ansible`` command-line utility is the :ref:`command module<command_module>`. You can use an ad-hoc task to call the command module and reboot all web servers in Atlanta, 10 at a time. Before Ansible can do this, you must have all servers in Atlanta listed in a a group called [atlanta] in your inventory, and you must have working SSH credentials for each machine in that group. To reboot all the servers in the [atlanta] group:
 
@@ -78,7 +78,7 @@ evaluate the variable on the box you were on.
 .. _file_transfer:
 
 Managing files
---------------
+-----------------
 
 An ad-hoc task can harness the power of Ansible and SCP to transfer many files to multiple machines in parallel. To transfer a file directly to all servers in the [atlanta] group:
 
@@ -111,7 +111,7 @@ As well as delete directories (recursively) and delete files:
 .. _managing_packages:
 
 Managing packages
------------------
+--------------------
 
 You might also use an ad-hoc task to install, update, or remove packages on managed nodes using a package management module like yum. To ensure a package is installed without updating it:
 
@@ -142,7 +142,7 @@ Ansible has modules for managing packages under many platforms. If there is no m
 .. _users_and_groups:
 
 Managing users and groups
--------------------------
+----------------------------
 
 You can create, manage, and remove user accounts on your managed nodes with ad-hoc tasks:
 
@@ -158,7 +158,7 @@ how to manipulate groups and group membership.
 .. _managing_services:
 
 Managing services
------------------
+--------------------
 
 Ensure a service is started on all webservers:
 
@@ -181,7 +181,7 @@ Ensure a service is stopped:
 .. _gathering_facts:
 
 Gathering facts
----------------
+------------------
 
 Facts represent discovered variables about a system. You can use facts to implement conditional execution of tasks but also just to get ad-hoc information about your systems. To see all facts:
 
