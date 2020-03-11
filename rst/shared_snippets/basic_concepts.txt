@@ -14,16 +14,16 @@ Inventory 仓库
 Inventory 仓库是保存受控节点信息的列表, 因为有时候也叫 "hostfile"， 类似于系统的 hosts 文件。 Inventory 仓库可以以 IP 的方式指定受控节点。 Inventory 同样可以组织管理节点、新增、嵌套组等方式，非常便于扩展。 更多请参考 :ref:`the Working with Inventory<intro_inventory>` 
 
 Modules 模块
-===========
+=============
 
 Modules 模块是 Ansible 执行代码的最小单元。 每个模块都是特殊用途，从特殊类型的数据库用户管理，到特殊类型的网络设备 VLAN 接口管理。  你可以在通过执行单个任务调用一个模块，也可以通过 playbook 同时调用执行钓具模块。 在链接中查看 Ansible 总共包括了多少个模块。:ref:` 模块列表 <modules_by_category>`.
 
 Tasks 任务
-========
+===========
 
 Ansible 执行操作的最小单位。 ad-hoc 更适合临时执行命令的执行场景。
 
 Playbooks 任务剧本
-================
+==================
 
 Playbooks 是任务列表的组合，通常会把常用的命令列表通过正确的语法写入到 playbook中。 Playbook 可以像普通 tasks 一样调用变量， 其使用 YAML 语法，便于读、写、分享、理解。更多请参考 :ref:`about_playbooks`.
