@@ -1,22 +1,22 @@
 .. _connections:
 
 ******************************
-Connection methods and details
+连接方法和详细信息
 ******************************
 
-This section shows you how to expand and refine the connection methods Ansible uses for your inventory.
+本节我们来介绍如何扩展和完善 `Ansible` 的连接方法。
 
-ControlPersist and paramiko
+持久连接和 paramiko 模块
 ---------------------------
 
-By default, Ansible uses native OpenSSH, because it supports ControlPersist (a performance feature), Kerberos, and options in ``~/.ssh/config`` such as Jump Host setup. If your control machine uses an older version of OpenSSH that does not support ControlPersist, Ansible will fallback to a Python implementation of OpenSSH called 'paramiko'.
+默认情况下， `Ansible` 使用本地 `OpenSSh`，因为 `OpenSSH` 支持长久连接(一种性能特征)， Kerberos 和 ``~/.ssh/config`` 的一些选项配置，比如：主机跳转设置。 如果您的管理机使用的是不支持 ``ControlPersist`` 的较旧版本 ``OpenSSH``，``Ansible`` 将回退使用 ``OpenSSH`` ``paramiko``连接模块。
 
 .. _connection_set_user:
 
-Setting a remote user
+设置远程连接用户
 ---------------------
 
-By default, Ansible connects to all remote devices with the user name you are using on the control node. If that user name does not exist on a remote device, you can set a different user name for the connection. If you just need to do some tasks as a different user, look at :ref:`become`. You can set the connection user in a playbook:
+默认情况下，Ansible 使用控制节点当前使用的用户连接远程设备。 如果该用户名在远程设备上不存在，则可以为连接设置其他用户名。设置远程连接用户请参考 :ref:`become`。 同样，你也可以在 playbook 中设置:
 
 .. code-block:: yaml
 
@@ -29,14 +29,14 @@ By default, Ansible connects to all remote devices with the user name you are us
      - name: thing to do first in this playbook
      . . .
 
-as a host variable in inventory:
+在 Inventory 中设置主机变量的方式也可以实现:
 
 .. code-block:: text
 
    other1.example.com     ansible_connection=ssh        ansible_user=myuser
    other2.example.com     ansible_connection=ssh        ansible_user=myotheruser
 
-or as a group variable in inventory:
+在 Inventory 中设置组变量:
 
 .. code-block:: yaml
 
@@ -47,39 +47,41 @@ or as a group variable in inventory:
       vars:
         ansible_user: admin
 
-Setting up SSH keys
--------------------
+设置 SSH 公私钥
+----------------------
 
-By default, Ansible assumes you are using SSH keys to connect to remote machines.  SSH keys are encouraged, but you can use password authentication if needed with the ``--ask-pass`` option. If you need to provide a password for :ref:`privilege escalation <become>` (sudo, pbrun, etc.), use ``--ask-become-pass``.
+默认， Ansible 假定你使用 SSH 密钥连接远程主机。 推荐使用 SSH key的方式，但如果你想使用密码认证的话，请使用 ``--ask-pass`` 选项。 如果需要输出密码，使用 ``--ask-become-pass`` ，详见 :ref:`privilege escalation <become>` (sudo, pbrun, etc.)
 
 .. include:: shared_snippets/SSH_password_prompt.txt
 
-To set up SSH agent to avoid retyping passwords, you can do:
+
+添加互信，可以避免每次 SSH 连接时输入密码:
 
 .. code-block:: bash
 
    $ ssh-agent bash
    $ ssh-add ~/.ssh/id_rsa
 
-Depending on your setup, you may wish to use Ansible's ``--private-key`` command line option to specify a pem file instead.  You can also add the private key file:
+具体视你的配置情况，你可以使用 ``--private-key`` 在命令行指定 pem 私钥文件。 好可以添加私钥文件:
 
 .. code-block:: bash
 
    $ ssh-agent bash
    $ ssh-add ~/.ssh/keypair.pem
 
-Another way to add private key files without using ssh-agent is using ``ansible_ssh_private_key_file`` in an inventory file as explained here:  :ref:`intro_inventory`.
+另外一种不使用 ``ssh-agent`` 添加私钥认证的方式是编辑 inventory 文件，指定 ``ansible_ssh_private_key_file`` ，具体参考 :ref:`intro_inventory`.
 
-Running against localhost
+在本机 localhost 运行
 -------------------------
 
-You can run commands against the control node by using "localhost" or "127.0.0.1" for the server name:
+你可以直接使用 "localhost" or "127.0.0.1"  指定在本机运行:
 
 .. code-block:: bash
 
     $ ansible localhost -m ping -e 'ansible_python_interpreter="/usr/bin/env python"'
 
-You can specify localhost explicitly by adding this to your inventory file:
+你可以将 localhost 添加到 Inventory 文件中显示指定:
+
 
 .. code-block:: bash
 
@@ -87,30 +89,30 @@ You can specify localhost explicitly by adding this to your inventory file:
 
 .. _host_key_checking_on:
 
-Managing host key checking
+首次互信认证提示
 --------------------------
 
-Ansible enables host key checking by default. Checking host keys guards against server spoofing and man-in-the-middle attacks, but it does require some maintenance.
+默认 Ansible 开启认证，即首次认证时会有提示。 检查主机密钥可以防止服务器欺骗和中间人攻击，但管理起来确实会比较麻烦。
 
-If a host is reinstalled and has a different key in 'known_hosts', this will result in an error message until corrected.  If a new host is not in 'known_hosts' your control node may prompt for confirmation of the key, which results in an interactive experience if using Ansible, from say, cron. You might not want this.
+如果一台主机被重装并且和原来的私钥不一样，那将无法连接。如果是一台新主机，连接时会提醒你验证密钥，这种交互的方式在使用 Ansible 时非常不方便，尤其是配合 cron 使用时。你可能不会喜欢.
 
-If you understand the implications and wish to disable this behavior, you can do so by editing ``/etc/ansible/ansible.cfg`` or ``~/.ansible.cfg``:
+如果你是专业人士明白关掉其它提醒背后的意义及安全风险，你可以编辑 ``/etc/ansible/ansible.cfg`` or ``~/.ansible.cfg``:
 
 .. code-block:: text
 
     [defaults]
     host_key_checking = False
 
-Alternatively this can be set by the :envvar:`ANSIBLE_HOST_KEY_CHECKING` environment variable:
+
+或者设置变量 :envvar:`ANSIBLE_HOST_KEY_CHECKING` :
 
 .. code-block:: bash
 
     $ export ANSIBLE_HOST_KEY_CHECKING=False
 
-Also note that host key checking in paramiko mode is reasonably slow, therefore switching to 'ssh' is also recommended when using this feature.
+另请注意，使用 paramiko 模式检查密钥的速度很慢。因此，使用此功能时也建议切换到 `ssh` 模式。
 
-Other connection methods
+其它连接方式
 ------------------------
 
-Ansible can use a variety of connection methods beyond SSH. You can select any connection plugin, including managing things locally and managing chroot, lxc, and jail containers.
-A mode called 'ansible-pull' can also invert the system and have systems 'phone home' via scheduled git checkouts to pull configuration directives from a central repository.
+Ansible 除了 SSH 外还有很多其它连接方法。 我们可以选择任何连接插件，包括在本地管理以及管理chroot，lxc 和jail容器。 Ansible 还有一种反转系统的连接方式: 'ansible-pull'。 该方式通过调度 git checkout 从中央仓库拉取配置来使系统处于'phone home' 「随时待命？」的状态。
