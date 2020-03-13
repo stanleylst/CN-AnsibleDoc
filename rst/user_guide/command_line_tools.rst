@@ -1,10 +1,9 @@
 .. _command_line_tools:
 
-Working with command line tools
+Ansible 命令工具集
 ===============================
 
-Most users are familiar with `ansible` and `ansible-playbook`, but those are not the only utilities Ansible provides.
-Below is a complete list of Ansible utilities. Each page contains a description of the utility and a listing of supported parameters.
+大部分用户对 `ansible` and `ansible-playbook` 都比较熟悉了， 但 Ansible 不仅仅提供了这些。以下是 Ansible 命令工具集的完整列表。 每个页面详细介绍了对应工具描述以及支持的参数列表。
 
 .. toctree::
    :maxdepth: 1

@@ -1,20 +1,20 @@
 .. _working_with_playbooks:
 
-Working With Playbooks
+Playbooks 介绍
 ======================
 
-Playbooks are Ansible's configuration, deployment, and orchestration language. They can describe a policy you want your remote systems to enforce, or a set of steps in a general IT process.
+`Playbooks` 是 `Ansible` 的配置、部署和编排语言。 Playbooks 是描述您希望执行的一组策略或IT流程中的一组步骤。
 
-If Ansible modules are the tools in your workshop, playbooks are your instruction manuals, and your inventory of hosts are your raw material.
+如果 `Ansible` 模块是车间工具，则剧本是说明手册，主机清单是原材料。
 
-At a basic level, playbooks can be used to manage configurations of and deployments to remote machines.  At a more advanced level, they can sequence multi-tier rollouts involving rolling updates, and can delegate actions to other hosts, interacting with monitoring servers and load balancers along the way.
+最基本的功能， playbooks 可用于管理远程计算机的配置和部署。更高级一点讲，他们可以序列平滑更新多层级结构的部署，并且可以将操作委派给其他主机，并与监视系统和负载均衡系统进行交互。
 
-While there's a lot of information here, there's no need to learn everything at once.  You can start small and pick up more features over time as you need them.
+尽管内容很多，但无需一次学习所有内容。 您可以从小处着手，并在需要时随时间使用更多功能。
 
-Playbooks are designed to be human-readable and are developed in a basic text language.  There are multiple
-ways to organize playbooks and the files they include, and we'll offer up some suggestions on that and making the most out of Ansible.
+playbook 的语法设计非常人性化，使用最基本的文本语言开发。 有多种方式来编排剧本引用文件，要深入使用 `Ansible` 需要了解本本次内容。
 
-You should look at `Example Playbooks <https://github.com/ansible/ansible-examples>`_ while reading along with the playbook documentation.  These illustrate best practices as well as how to put many of the various concepts together.
+
+playbook 文档请参考 `Example Playbooks <https://github.com/ansible/ansible-examples>`。 这些最佳实践说明将展示如何将许多不同的概念结合在一起解决实际问题。
 
 .. toctree::
    :maxdepth: 2
