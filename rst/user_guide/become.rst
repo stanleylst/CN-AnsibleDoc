@@ -1,39 +1,39 @@
 .. _become:
 
 ******************************************
-Understanding privilege escalation: become
+了解特权升级: become
 ******************************************
 
-Ansible uses existing privilege escalation systems to execute tasks with root privileges or with another user's permissions. Because this feature allows you to 'become' another user, different from the user that logged into the machine (remote user), we call it ``become``. The ``become`` keyword leverages existing privilege escalation tools like `sudo`, `su`, `pfexec`, `doas`, `pbrun`, `dzdo`, `ksu`, `runas`, `machinectl` and others.
+`Ansible` 使用现有的权限升级系统以 `root` 或指定用户的权限执行任务。 这个特性允许你使用不同于你的登录用户的用户来在远程主机执行任务，我们称之为 ``become``。 ``become`` 模块使用现有的权限升级工具来完成该项工作，比如： `sudo`, `su`, `pfexec`, `doas`, `pbrun`, `dzdo`, `ksu`, `runas`, `machinectl`等。
 
 .. contents::
    :local:
 
-Using become
-============
+使用 become
+==============
 
-You can control the use of ``become`` with play or task directives, connection variables, or at the command line. If you set privilege escalation properties in multiple ways, review the :ref:`general precedence rules<general_precedence_rules>` to understand which settings will be used.
+你可以通过剧本、任务指令、连接变量或者命令行控制 ``become`` 的使用。如果你以多种方式设置特权提升，阅读了解 :ref:`general precedence rules<general_precedence_rules>`
 
-A full list of all become plugins that are included in Ansible can be found in the :ref:`become_plugin_list`.
+Ansible 包含的所有 ``become`` 插件都可以在这里找到: :ref:`become_plugin_list`.
 
-Become directives
+Become 指令介绍
 -----------------
 
-You can set the directives that control ``become`` at the play or task level. You can override these by setting connection variables, which often differ from one host to another. These variables and directives are independent. For example, setting ``become_user`` does not set ``become``.
+你可以在剧本或任务层级设置指令来控制 ``become``。 您可以通过设置连接变量来覆盖如前所述的设置，连接变量通常在主机之间会有所不同。 这些变量和指令是独立的。比如： ``become_user`` 和 ``become`` 是不一样的。
 
 become
-    set to ``yes`` to activate privilege escalation.
+    ``yes`` 表示激活特权。
 
-become_user
-    set to user with desired privileges — the user you `become`, NOT the user you login as. Does NOT imply ``become: yes``, to allow it to be set at host level. Default value is ``root``.
+become_user    
+    设置远程执行用户，这个账户通常和你当前使用的账户不同，因为需要 `become` 成要运行账户的权限。但这并不意味着设置 ``become: yes`` 等同于在主机系统级别做变更设置。默认值是 ``root``。[原文：set to user with desired privileges — the user you `become`, NOT the user you login as. Does NOT imply ``become: yes``, to allow it to be set at host level. Default value is ``root``.]
 
 become_method
-    (at play or task level) overrides the default method set in ansible.cfg, set to use any of the :ref:`become_plugins`.
+    (在剧本或任务级别)覆盖 ``ansible.cfg`` 中默认的方法。具体参见 :ref:`become_plugins`.
 
 become_flags
-    (at play or task level) permit the use of specific flags for the tasks or role. One common use is to change the user to nobody when the shell is set to no login. Added in Ansible 2.2.
+    (在剧本或任务级别)允许为任务或角色使用特定的标志。 一种常见的用法是：当用户 ``SHELL`` 为 ``nologin``时，将用户更改为 ``nobody``。 该功能需 ``Ansible 2.2``+版本。
 
-For example, to manage a system service (which requires ``root`` privileges) when connected as a non-``root`` user, you can use the default value of ``become_user`` (``root``):
+举个例子：当管理一个需要 ``root`` 权限的系统服务时，你的连接用户是非 ``root`` 用户，你可以使用 ``become_user`` 切换成(``root``) 用户权限:
 
 .. code-block:: yaml
 
@@ -43,7 +43,7 @@ For example, to manage a system service (which requires ``root`` privileges) whe
         state: started
       become: yes
 
-To run a command as the ``apache`` user:
+以 ``apache``  用户身份执行一条命令:
 
 .. code-block:: yaml
 
@@ -52,7 +52,7 @@ To run a command as the ``apache`` user:
       become: yes
       become_user: apache
 
-To do something as the ``nobody`` user when the shell is nologin:
+当 ``shell`` 是 ``nologin``时，以 ``nobody`` 用户身份执行操作:
 
 .. code-block:: yaml
 
@@ -63,8 +63,8 @@ To do something as the ``nobody`` user when the shell is nologin:
       become_user: nobody
       become_flags: '-s /bin/sh'
 
-To specify a password for sudo, run ``ansible-playbook`` with ``--ask-become-pass`` (``-K`` for short).
-If you run a playbook utilizing ``become`` and the playbook seems to hang, most likely it is stuck at the privilege escalation prompt. Stop it with `CTRL-c`, then execute the playbook with ``-K`` and the appropriate password.
+执行 ``sudo`` 时需输入密码， ``ansible-playbook`` 使用 ``--ask-become-pass`` 参数 (或``-K`` 短命令参数的形式指定要求输入密码).
+
 
 Become connection variables
 ---------------------------
