@@ -140,30 +140,18 @@ Ansible 模块运行命令的原理： 通过将参数替换为模块文件，�
 
 .. versionchanged:: 2.1
 
+Ansible ``become`` 的安全隐患很隐蔽。 从 Ansible 2.1开始， 当 ``become`` 涉及安全问题时，Ansible 默认引发错误。 如果你不使用管理或者 ``POSIX ACLs``, 你必须使用非特权用户连接，你必须使用 ``become`` 为一个非特权用户执行操作，并且你自己决定受控节点是否足够安全以便你可以设置权限为所有人可读，如果是，则可以打开 :file:`ansible.cfg` 中的 ``allow_world_readable_tmpfiles`` 开关。 该设置为将不再报 ``error``， 而是像 2.1 版本以前的方式执行，只是报 ``warning`` 后继续执行命令。
 
-Ansible makes it hard to unknowingly use ``become`` insecurely. Starting in Ansible 2.1,
-Ansible defaults to issuing an error if it cannot execute securely with ``become``.
-If you cannot use pipelining or POSIX ACLs, you must connect as an unprivileged user,
-you must use ``become`` to execute as a different unprivileged user,
-and you decide that your managed nodes are secure enough for the
-modules you want to run there to be world readable, you can turn on
-``allow_world_readable_tmpfiles`` in the :file:`ansible.cfg` file.  Setting
-``allow_world_readable_tmpfiles`` will change this from an error into
-a warning and allow the task to run as it did prior to 2.1.
 
-Not supported by all connection plugins
+并非所有连接插件都支持
 ---------------------------------------
 
-Privilege escalation methods must also be supported by the connection plugin
-used. Most connection plugins will warn if they do not support become. Some
-will just ignore it as they always run as root (jail, chroot, etc).
+使用的连接插件必须支持提权方法。大部分的插件如果不支持 ``become`` 会有告警。一些刚直接忽略直接使用 ``root`` 执行(比如： jail, chroot, etc).
 
-Only one method may be enabled per host
+每台主机只能启用一种办法
 ---------------------------------------
 
-Methods cannot be chained. You cannot use ``sudo /bin/su -`` to become a user,
-you need to have privileges to run the command as that user in sudo or be able
-to su directly to it (the same for pbrun, pfexec or other supported methods).
+方法不能混用。你不能使用 ``sudo /bin/su -`` 来 ``become`` 一个用户，你执行命令的用户必须是在 sudo 权限白名单中或者可以直接直接 su 命令来执行（ pbrun, pfexec 或其它方法同样的要求）
 
 Privilege escalation must be general
 ------------------------------------
