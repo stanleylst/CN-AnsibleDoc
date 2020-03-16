@@ -66,104 +66,80 @@ become_flags
 执行 ``sudo`` 时需输入密码， ``ansible-playbook`` 使用 ``--ask-become-pass`` 参数 (或``-K`` 短命令参数的形式指定要求输入密码).
 
 
-Become connection variables
+Become 连接变量
 ---------------------------
 
-You can define different ``become`` options for each managed node or group. You can define these variables in inventory or use them as normal variables.
+你可以为不同的受控节点或受控组定义不同的 ``become``  配置。你可以在 Inventory 中定义这些变量或者在像普通变量一样使用他们。
 
 ansible_become
-    equivalent of the become directive, decides if privilege escalation is used or not.
+    等同 ``become`` 指令，定义是否使用提权功能
 
 ansible_become_method
-    which privilege escalation method should be used
+    使用哪种提权方式
 
 ansible_become_user
-    set the user you become through privilege escalation; does not imply ``ansible_become: yes``
+    通过提权设置用户；但并不表示 ``ansible_become: yes``
 
 ansible_become_password
-    set the privilege escalation password. See :ref:`playbooks_vault` for details on how to avoid having secrets in plain text
+    设置提权用户密码。 :ref:`playbooks_vault` 详细描述了如何在普通文本中定义密码。
 
-For example, if you want to run all tasks as ``root`` on a server named ``webserver``, but you can only connect as the ``manager`` user, you could use an inventory entry like this:
+举例： 如果你希望以 ``root``  用户在在 ``webserver`` 服务器运行变更，但你只能以 ``manager`` 连接远程节点 ，你可以使用如下 Inventory 的方式定义:
 
 .. code-block:: text
 
     webserver ansible_user=manager ansible_become=yes
 
 .. note::
-    The variables defined above are generic for all become plugins but plugin specific ones can also be set instead.
-    Please see the documentation for each plugin for a list of all options the plugin has and how they can be defined.
-    A full list of become plugins in Ansible can be found at :ref:`become_plugins`.
+    如上变量的定义方式适用于所有 ``become`` 插件，但同样也可以以该方式为其它插件设置变量。 具体请参考各插件对应文件，查看如何定义。 ``become`` 插件更详细信息请参考 :ref:`become_plugins`.
 
-Become command-line options
+
+Become 命令行参数
 ---------------------------
 
 --ask-become-pass, -K
-    ask for privilege escalation password; does not imply become will be used. Note that this password will be used for all hosts.
+    要求输入提权用户密码; 但并不意味着会使用 ``become`` 模块。需要注意的是，密码是针对本次执行命令的所有主机。
 
 --become, -b
-    run operations with become (no password implied)
+    调用 ``become`` 模块运行命令(不用输入密码)
 
 --become-method=BECOME_METHOD
-    privilege escalation method to use (default=sudo),
-    valid choices: [ sudo | su | pbrun | pfexec | doas | dzdo | ksu | runas | machinectl ]
+    提权方式，默认 sudo
+    可用选项： [ sudo | su | pbrun | pfexec | doas | dzdo | ksu | runas | machinectl ]
 
 --become-user=BECOME_USER
     run operations as this user (default=root), does not imply --become/-b
+    提权运行的用户，默认 ``root``,但并不意味着使用 ``--become/-b``
 
-Risks and limitations of become
+become 的使用风险和局限性
 ===============================
 
-Although privilege escalation is mostly intuitive, there are a few limitations
-on how it works.  Users should be aware of these to avoid surprises.
+尽管特权升级在大多数情况下都是直观的，但对其工作方式仍存在一些限制。 用户应注意这些事项，以免出现意外。
 
-Risks of becoming an unprivileged user
+成为非特权用户的风险
 --------------------------------------
 
-Ansible modules are executed on the remote machine by first substituting the
-parameters into the module file, then copying the file to the remote machine,
-and finally executing it there.
+Ansible 模块运行命令的原理： 通过将参数替换为模块文件，然后将文件复制到远程计算机，最后在该计算机上执行，
 
-Everything is fine if the module file is executed without using ``become``,
-when the ``become_user`` is root, or when the connection to the remote machine
-is made as root.  In these cases Ansible creates the module file with permissions
-that only allow reading by the user and root, or only allow reading by the unprivileged
-user being switched to.
+当不使用 ``become``, 或者 ``become_user = root``  或使用 ``root`` 用户连接远程主机时，模块文件的执行都很正常。但在前述这些特殊情况下使用时， Ansible 模块文件的创建需要预先判断用户是否有权限，或者提权用户只有可读权限时，就会有错误发生。
 
-However, when both the connection user and the ``become_user`` are unprivileged,
-the module file is written as the user that Ansible connects as, but the file needs to
-be readable by the user Ansible is set to ``become``. In this case, Ansible makes
-the module file world-readable for the duration of the Ansible module execution.
-Once the module is done executing, Ansible deletes the temporary file.
+然而，如果连接用户和 ``become_user`` 提权后的用户均没有权限，模块文件是以 Ansible 连接用户编辑的，但文件需要 ``become`` 后的用户有可读权限。 这种情况下， 在 Ansible 模块执行期间，会让文件所有用户可读，一旦执行完毕，Ansible 会临时删除该文件。
 
-If any of the parameters passed to the module are sensitive in nature, and you do
-not trust the client machines, then this is a potential danger.
+传递给模块的任何参数本质上是敏感的，而客户端计算机是否安全你并不知道，则可能存在危险。
 
-Ways to resolve this include:
+解决此问题的方法包括:
 
-* Use `pipelining`.  When pipelining is enabled, Ansible does not save the
-  module to a temporary file on the client.  Instead it pipes the module to
-  the remote python interpreter's stdin. Pipelining does not work for
-  python modules involving file transfer (for example: :ref:`copy <copy_module>`,
-  :ref:`fetch <fetch_module>`, :ref:`template <template_module>`), or for non-python modules.
+* 使用 `pipelining`，当管道开启后， Ansible 不在远程主机上保存临时文件，取而代之的是将模块放在远程主机的 Python 环境标准输入。管道对于 python 模块文件传输的场景不合适(比如: :ref:`copy <copy_module>`,
+  :ref:`fetch <fetch_module>`, :ref:`template <template_module>`)，没有 Python 模块的环境也不行。
+* 在受控机上安装 POSIX.1e 文件系统 acl 支持。如果远程主机临时目录是以
 
-* Install POSIX.1e filesystem acl support on the
-  managed host.  If the temporary directory on the remote host is mounted with
-  POSIX acls enabled and the :command:`setfacl` tool is in the remote ``PATH``
-  then Ansible will use POSIX acls to share the module file with the second
-  unprivileged user instead of having to make the file readable by everyone.
+* Install POSIX.1e filesystem acl support on the POSIX acls 挂载的，并且远程 ``PATH`` 使用 :command:`setfacl` 作了设置。 Ansible 将使用 POSIX acls 对提权用户分享模块，而不用把文件权限设置为所有人可读。
 
-* Avoid becoming an unprivileged
-  user.  Temporary files are protected by UNIX file permissions when you
-  ``become`` root or do not use ``become``.  In Ansible 2.1 and above, UNIX
-  file permissions are also secure if you make the connection to the managed
-  machine as root and then use ``become`` to access an unprivileged account.
+* 避免 ``become`` 为没有权限的用户。当你 ``become`` 为 ``root`` 或者不使用 ``become``时，临时文件的权限是被 Unix 文件权限保护。从 Ansible 2.1+开始，如果你连接受控机使用的用户是``root``,然后 ``become`` 后的用户却没有权限，那么 Unix 文件权限系统依然是安全的。
 
-.. warning:: Although the Solaris ZFS filesystem has filesystem ACLs, the ACLs
-    are not POSIX.1e filesystem acls (they are NFSv4 ACLs instead).  Ansible
-    cannot use these ACLs to manage its temp file permissions so you may have
-    to resort to ``allow_world_readable_tmpfiles`` if the remote machines use ZFS.
+.. warning:: 尽管 ``Solaris ZFS`` 文件系统使用 ``ACLs`` 权限系统，但 ``ACLs`` 却不支持 ``POSIX.1e`` 文件系统权限(其使用 NFSV4 ACLS 代替)。所以，Ansible 无法使用 ``ACLs`` 文件系统权限管理临时文件权限，因此，你需要回到 ``allow_world_readable_tmpfiles`` 的方式管理使用 ``ZFS`` 文件系统的受控主机文件权限。
 
 .. versionchanged:: 2.1
+
 
 Ansible makes it hard to unknowingly use ``become`` insecurely. Starting in Ansible 2.1,
 Ansible defaults to issuing an error if it cannot execute securely with ``become``.
