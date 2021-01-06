@@ -153,12 +153,12 @@ Ansible ``become`` 的安全隐患很隐蔽。 从 Ansible 2.1开始， 当 ``be
 
 方法不能混用。你不能使用 ``sudo /bin/su -`` 来 ``become`` 一个用户，你执行命令的用户必须是在 sudo 权限白名单中或者可以直接直接 su 命令来执行（ pbrun, pfexec 或其它方法同样的要求）
 
-Privilege escalation must be general
+特权提升必须是全局的
 ------------------------------------
 
+你不能针对特定命令进行权限提升。 `Ansible` 不会使用特定的命令来实现特权提升，而是通过执行一个名字时时变化的临时文件来实现。如果你只对 '/sbin/service' or '/bin/chmod' 赋予权限，提权将不会成功，因为这些路径与 `Ansible` 创建的用于运行模块的临时文件不匹配。
 You cannot limit privilege escalation permissions to certain commands.
-Ansible does not always
-use a specific command to do something but runs modules (code) from
+Ansible does not always use a specific command to do something but runs modules (code) from
 a temporary file name which changes every time.  If you have '/sbin/service'
 or '/bin/chmod' as the allowed commands this will fail with ansible as those
 paths won't match with the temporary file that Ansible creates to run the
